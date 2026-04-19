@@ -1205,8 +1205,8 @@ body {
     position: relative;
     z-index: 3;
     max-width: 1280px;
-    margin: 18px auto 120px;
-    padding: 0 16px;
+    margin: 28px auto 118px;
+    padding: 0 18px;
 }
 
 .awardsContainer {
@@ -1227,37 +1227,42 @@ body {
 .awardsTabs {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 22px;
 }
 
 .awardsTab {
-    border: 0;
-    background: transparent;
-    padding: 0;
+    min-height: 34px;
+    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.025);
+    padding: 0 14px;
+    border-radius: 999px;
     cursor: pointer;
     font-family: "Nunito", sans-serif;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 800;
     color: rgba(255, 255, 255, 0.72);
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .awardsTab:hover {
     color: #ffffff;
     transform: translateY(-1px);
+    border-color: rgba(238, 100, 42, 0.28);
+    background: rgba(238, 100, 42, 0.06);
 }
 
 .awardsTab.active {
     color: #ee642a;
-    font-weight: 800;
+    border-color: rgba(238, 100, 42, 0.46);
+    background: rgba(238, 100, 42, 0.10);
 }
 
 .awardsGrid {
     display: grid;
-    grid-template-columns: repeat(2, 595.94px);
-    column-gap: 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 18px;
     align-items: start;
     justify-content: start;
 }
@@ -1265,21 +1270,27 @@ body {
 .awardsColumn {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
 .awardsColumnRight {
-    transform: translateY(-38px);
+    transform: none;
 }
 
 /* Carte générique */
 .awardCard {
     position: relative;
-    width: 595.94px;
+    width: 100%;
     overflow: hidden;
-    border-radius: 13.9px;
-    background: #0b0b0b;
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+    border-radius: 8px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.015) 44%, rgba(238, 100, 42, 0.045) 100%),
+        #070707;
+    box-shadow:
+        0 18px 42px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    isolation: isolate;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .awardCard img {
@@ -1288,7 +1299,39 @@ body {
     object-fit: cover;
     display: block;
     position: relative;
+    box-sizing: border-box;
     z-index: 3;
+}
+
+.awardCard:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 24px 52px rgba(0, 0, 0, 0.34),
+        0 0 0 1px rgba(238, 100, 42, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.045);
+}
+
+.awardCard::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), transparent 28%, rgba(0, 0, 0, 0.18) 100%),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 88px);
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.awardsGrid[data-active-game="0"] .awardCard {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.012) 44%, rgba(238, 100, 42, 0.05) 100%),
+        #050505;
+}
+
+.awardsGrid[data-active-game="0"] .awardCard img {
+    object-fit: contain;
+    padding: clamp(34px, 4vw, 58px);
 }
 
 /* Bordure : blanc en haut/gauche, orange en bas/droite */
@@ -1297,7 +1340,7 @@ body {
     position: absolute;
     inset: 0;
     padding: 2.32px;
-    border-radius: 13.9px;
+    border-radius: 8px;
     background: linear-gradient(
         135deg,
         rgba(255, 255, 255, 0.92) 0%,
@@ -1317,19 +1360,19 @@ body {
 
 /* Dimensions exactes des 4 images */
 .awardsColumnLeft .awardCard:nth-child(1) {
-    height: 488.01px;
+    height: 416px;
 }
 
 .awardsColumnLeft .awardCard:nth-child(2) {
-    height: 556.99px;
+    height: 468px;
 }
 
 .awardsColumnRight .awardCard:nth-child(1) {
-    height: 484.78px;
+    height: 390px;
 }
 
 .awardsColumnRight .awardCard:nth-child(2) {
-    height: 470.22px;
+    height: 400px;
 }
 
 /* Bloc texte + bouton en bas à droite */
@@ -1381,31 +1424,77 @@ body {
 }
 
 .awardsButtonsRow {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
-    gap: 0;
-    margin-top: 40px;
-    width: 595.94px;
+    gap: 12px;
+    width: 100%;
+    margin-top: 18px;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.28));
 }
 
-.awardsMoreBtn {
-    flex: 1;
-    height: 80px;
+.awardsMoreBtn,
+.awardsDetailsBtn {
+    position: relative;
+    min-width: 0;
+    height: 58px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0 calc(16px + 14px) 0 24px;
+    overflow: hidden;
+    padding: 0 18px;
+    border-radius: 6px;
     text-decoration: none;
     font-family: "Nunito", sans-serif;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 800;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    white-space: nowrap;
+    isolation: isolate;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.awardsMoreBtn span,
+.awardsDetailsBtn span {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.awardsMoreBtn::before,
+.awardsDetailsBtn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.16) 44%, transparent 72%);
+    transform: translateX(-44%);
+    transition: opacity 0.25s ease, transform 0.35s ease;
+}
+
+.awardsMoreBtn {
     color: #ffffff;
-    background: linear-gradient(90deg, #c1260f 0%, #ee642a 100%);
-    /* diagonale : bas-droit coupe vers l'intérieur */
-    clip-path: polygon(0 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
-    box-shadow: 0 10px 24px rgba(238, 100, 42, 0.22);
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 38%),
+        linear-gradient(90deg, #c1260f 0%, #ee642a 100%);
+    clip-path: none;
+    box-shadow:
+        0 12px 26px rgba(238, 100, 42, 0.23),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
     z-index: 1;
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.awardsMoreBtn,
+.awardsDetailsBtn {
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.24);
 }
 
 .awardsMoreBtn:hover {
@@ -1415,30 +1504,35 @@ body {
 }
 
 .awardsDetailsBtn {
-    flex: 1;
-    height: 80px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 24px 0 calc(16px + 14px);
-    text-decoration: none;
-    font-family: "Nunito", sans-serif;
-    font-size: 24px;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.85);
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(238, 100, 42, 0.55);
-    /* diagonale : haut-gauche coupe — s'emboîte avec Jouer via margin négatif */
-    clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%);
-    margin-left: -14px;
+    color: #ffffff;
+    background:
+        linear-gradient(135deg, rgba(238, 100, 42, 0.30), rgba(255, 255, 255, 0.075) 45%, rgba(255, 255, 255, 0.035) 100%),
+        #101010;
+    border: 1px solid rgba(238, 100, 42, 0.82);
+    clip-path: none;
+    margin-left: 0;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 10px 24px rgba(0, 0, 0, 0.24),
+        0 0 0 1px rgba(238, 100, 42, 0.10);
     z-index: 2;
-    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .awardsDetailsBtn:hover {
     transform: translateY(-2px);
-    background: rgba(238, 100, 42, 0.08);
-    box-shadow: 0 12px 24px rgba(238, 100, 42, 0.16);
+    border-color: rgba(255, 133, 72, 0.95);
+    background:
+        linear-gradient(135deg, rgba(238, 100, 42, 0.40), rgba(255, 255, 255, 0.095) 45%, rgba(255, 255, 255, 0.04) 100%),
+        #151515;
+    box-shadow:
+        0 14px 30px rgba(238, 100, 42, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.awardsMoreBtn:hover::before,
+.awardsDetailsBtn:hover::before {
+    opacity: 1;
+    transform: translateX(42%);
 }
 
 /* Animations: switch direction + sequential reveal */
@@ -1470,26 +1564,24 @@ body {
     z-index: 4 !important;
 }
 
-.awardsMoreBtn,
-.awardsDetailsBtn {
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: opacity 420ms ease, transform 420ms cubic-bezier(.2,.9,.2,1);
-}
-
 .awardsMoreBtn.is-visible,
 .awardsDetailsBtn.is-visible {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+    transition:
+        opacity 420ms ease,
+        transform 420ms cubic-bezier(.2,.9,.2,1),
+        filter 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
 
 /* Ensure hover interaction is not blocked by overlays or stacking context */
 .awardsMoreBtn,
 .awardsDetailsBtn {
     z-index: 20; /* sit above decorative pseudo-elements */
-    pointer-events: auto; /* make sure they receive hover/click */
 }
 
 .awardsMoreBtn:hover {
@@ -1500,8 +1592,13 @@ body {
 
 .awardsDetailsBtn:hover {
     transform: translateY(-2px) !important;
-    background: rgba(238, 100, 42, 0.08) !important;
-    box-shadow: 0 12px 24px rgba(238, 100, 42, 0.16) !important;
+    border-color: rgba(255, 133, 72, 0.95) !important;
+    background:
+        linear-gradient(135deg, rgba(238, 100, 42, 0.40), rgba(255, 255, 255, 0.095) 45%, rgba(255, 255, 255, 0.04) 100%),
+        #151515 !important;
+    box-shadow:
+        0 14px 30px rgba(238, 100, 42, 0.20),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
 /* Responsive */
@@ -1562,6 +1659,11 @@ body {
     .awardsColumnRight .awardCard:nth-child(2) {
         height: auto;
         aspect-ratio: 596 / 500;
+    }
+
+    .awardsColumnRight .awardCard:nth-child(1),
+    .awardsColumnRight .awardCard:nth-child(2) {
+        aspect-ratio: 596 / 440;
     }
 }
 
@@ -1882,8 +1984,8 @@ body {
 
     .awardsMoreBtn,
     .awardsDetailsBtn {
-        height: 68px;
-        font-size: 22px;
+        height: 60px;
+        font-size: 18px;
     }
 
     .siteFooter {
@@ -1986,14 +2088,14 @@ body {
     }
 
     .awardsButtonsRow {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 10px;
     }
 
     .awardsMoreBtn,
     .awardsDetailsBtn {
         width: 100%;
-        height: 68px;
+        height: 60px;
         margin-left: 0;
         clip-path: none;
     }

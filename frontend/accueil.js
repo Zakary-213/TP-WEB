@@ -34,6 +34,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (detailsBtn) detailsBtn.setAttribute("href", detailsHrefs[index] || "#");
     }
 
+    function updateActiveGame(index) {
+        if (grid) grid.dataset.activeGame = String(index);
+    }
+
     function spawnCards(images, onAllLoaded) {
         spawnTimeouts.forEach(id => clearTimeout(id));
         spawnTimeouts = [];
@@ -136,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (imagesLoaded) finish();
             };
 
+            updateActiveGame(newIndex);
             spawnCards(gamesData[newIndex], onAllLoaded);
 
             grid.addEventListener('transitionend', onTransitionBack);
@@ -156,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     updateButtonHrefs(0);
+    updateActiveGame(0);
     spawnCards(gamesData[0], () => {
         setTimeout(showButtons, 300);
     });
