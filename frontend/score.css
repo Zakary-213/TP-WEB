@@ -3,7 +3,10 @@
    Tricolore néon : Orange (Canvas) · Vert (GOW) · Cyan (Dom)
    ======================================================== */
 
+/* Ce fichier stylise la page de classements des trois jeux. */
+
 :root {
+    /* Couleurs par jeu et couleurs communes des cartes de score. */
     --sc-canvas:        #EE642A;
     --sc-canvas-glow:   rgba(238, 100, 42, 0.22);
     --sc-gow:           #7cff6b;

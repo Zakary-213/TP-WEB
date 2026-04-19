@@ -2,22 +2,31 @@
  * logic.js – Logique pure du jeu ZIP (sans effets de bord DOM).
  */
 
-import { getGridSize, getTotalCells } from '../core/config.js';
+// La logique de déplacement dépend uniquement de la taille courante de la grille.
+import { getGridSize } from '../core/config.js';
 
 /* ---------- Adjacence ---------- */
 export function isAdjacent(idx1, idx2) {
+    // Récupère la largeur actuelle de la grille pour convertir les indices en coordonnées.
     const gridSize = getGridSize();
+    // Ligne de la première case.
     const r1 = Math.floor(idx1 / gridSize);
+    // Colonne de la première case.
     const c1 = idx1 % gridSize;
+    // Ligne de la deuxième case.
     const r2 = Math.floor(idx2 / gridSize);
+    // Colonne de la deuxième case.
     const c2 = idx2 % gridSize;
+    // Deux cases sont adjacentes si elles se touchent verticalement ou horizontalement.
     return (Math.abs(r1 - r2) === 1 && c1 === c2) ||
            (Math.abs(c1 - c2) === 1 && r1 === r2);
 }
 
 /* ---------- Helpers ---------- */
 function findNumberAtIndex(numbers, index) {
+    // Cherche dans les indices visibles si une valeur est posée sur cette case.
     const item = numbers.find((n) => n.index === index);
+    // Retourne la valeur trouvée, sinon null pour dire "pas de chiffre ici".
     return item ? item.value : null;
 }
 
@@ -26,19 +35,26 @@ function findNumberAtIndex(numbers, index) {
  * Le joueur doit passer par les indices dans l'ordre croissant.
  */
 function getExpectedNextNumber(path, numbers) {
+    // Le prochain chiffre attendu commence toujours à 1.
     let next = 1;
+    // Parcourt le chemin déjà dessiné par le joueur.
     for (const idx of path) {
+        // Regarde si la case courante contient un chiffre imposé.
         const v = findNumberAtIndex(numbers, idx);
+        // Si ce chiffre est celui attendu, on attend le suivant.
         if (v === next) next++;
     }
+    // Retourne le prochain chiffre fixe que le joueur a le droit de traverser.
     return next;
 }
 
 function isBlockedCell(obstacles, index) {
+    // Demande à chaque obstacle s'il bloque totalement cette cellule.
     return obstacles.some((obstacle) => obstacle.blocksCell(index));
 }
 
 function isBlockedEdge(obstacles, fromIdx, toIdx) {
+    // Demande à chaque obstacle s'il bloque le passage entre deux cellules voisines.
     return obstacles.some((obstacle) => obstacle.blocksEdge(fromIdx, toIdx, getGridSize()));
 }
 
@@ -52,7 +68,9 @@ function isBlockedEdge(obstacles, fromIdx, toIdx) {
  * @param {() => void} startTimerIfNeeded
  */
 export function handleCellInteraction(index, gameState, uiState, startTimerIfNeeded) {
+    // Récupère les données nécessaires depuis l'état de partie.
     const { path, numbers, obstacles = [] } = gameState;
+    // Vérifie si la cellule touchée contient un chiffre imposé.
     const cellNumber = findNumberAtIndex(numbers, index);
 
     // ── Clic sur la case numérotée "1" : (re)démarre le tracé ──
@@ -125,10 +143,7 @@ export function handleCellInteraction(index, gameState, uiState, startTimerIfNee
 }
 
 /* ---------- Condition de victoire ---------- */
-export function hasWon(path) {
-    return path.length === getTotalCells();
-}
-
 export function hasWonAgainstTarget(path, targetLength) {
+    // La partie est gagnée quand le chemin du joueur atteint la longueur de la solution.
     return path.length === targetLength;
 }

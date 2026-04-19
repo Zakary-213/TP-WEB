@@ -1,5 +1,8 @@
-/*Modale d'authentification */
+/* Styles principaux du portail frontend : modale, navbar, accueil, hero et responsive. */
 
+/* Modale d'authentification */
+
+/* Overlay plein écran de la modale login/signup, ouvert par login.js. */
 .authModalOverlay {
     /* display géré par JS — display:none quand fermée, flex quand ouverte */
     display: none;

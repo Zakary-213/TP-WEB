@@ -3,7 +3,10 @@
    Theme : Football / Stade — accent vert clair
    ======================================================== */
 
+/* Ce fichier stylise uniquement la page explicative du jeu GamesOnWeb. */
+
 :root {
+    /* Palette dédiée à l'univers football/stade. */
     --gow-primary: #7cff6b;
     --gow-primary-deep: #2fca5e;
     --gow-accent: #d7ff4d;
@@ -13,6 +16,7 @@
 }
 
 /* ───────── HERO ───────── */
+/* Section hero de la page GamesOnWeb. */
 .gowHero {
     position: relative;
     width: 100%;

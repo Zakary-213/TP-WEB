@@ -1,18 +1,29 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Conteneur média du hero.
     const media = document.getElementById("screenMedia");
+    // Élément vidéo principal.
     const video = document.getElementById("heroVideo");
+    // Bloc texte superposé à la vidéo.
     const content = document.getElementById("screenContent");
+    // Petit texte au-dessus du titre.
     const kicker = document.getElementById("screenKicker");
+    // Titre du slide.
     const heading = document.getElementById("screenHeading");
+    // Description du slide.
     const text = document.getElementById("screenText");
+    // Bouton pour jouer au jeu du slide.
     const playNowBtn = document.getElementById("playNowBtn");
+    // Bouton pour regarder la bande-annonce.
     const watchTrailerBtn = document.getElementById("watchTrailerBtn");
+    // Conteneur des points de navigation.
     const dotsContainer = document.getElementById("screenDots");
 
+    // Si un élément essentiel manque, on évite toute erreur JavaScript.
     if (!media || !video || !content || !kicker || !heading || !text || !playNowBtn || !watchTrailerBtn || !dotsContainer) {
         return;
     }
 
+    // Données des trois slides du hero.
     const slides = [
         {
             video: "./assets/videos/canvasBO.mp4",
@@ -40,19 +51,31 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
+    // Durée avant changement automatique de slide.
     const AUTO_SWITCH_DELAY = 5000;
+    // Durée de lecture courte avant de figer l'aperçu vidéo.
     const FREEZE_PREVIEW_DELAY = 180;
+    // Durée du fondu pendant le changement de slide.
     const SWITCH_FADE_DELAY = 420;
 
+    // Index du slide courant.
     let currentIndex = 0;
+    // Timeout du changement automatique.
     let autoSwitchTimeout = null;
+    // Timeout qui fige l'aperçu vidéo.
     let freezeTimeout = null;
+    // Timeout utilisé pendant le fondu de changement.
     let switchTimeout = null;
+    // Verrou pour éviter deux changements simultanés.
     let isTransitioning = false;
+    // Indique si la vidéo courante est suffisamment chargée.
     let isVideoReady = false;
+    // Jeton anti-course pour ignorer les anciens chargements vidéo.
     let currentLoadToken = 0;
+    // Mode demandé : aperçu figé ou bande-annonce complète.
     let requestedMode = "frozen"; // "frozen" | "trailer"
 
+    // Annule le timeout de gel vidéo.
     function clearFreezeTimeout() {
         if (freezeTimeout) {
             clearTimeout(freezeTimeout);
@@ -60,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Annule le timeout de transition.
     function clearSwitchTimeout() {
         if (switchTimeout) {
             clearTimeout(switchTimeout);
@@ -67,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Annule le changement automatique.
     function clearAutoSwitchTimeout() {
         if (autoSwitchTimeout) {
             clearTimeout(autoSwitchTimeout);
@@ -74,9 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Programme le passage automatique au slide suivant.
     function scheduleAutoSwitch() {
         clearAutoSwitchTimeout();
 
+        // Pas d'auto-switch pendant une transition ou une bande-annonce.
         if (isTransitioning || requestedMode === "trailer") {
             return;
         }
@@ -86,10 +113,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }, AUTO_SWITCH_DELAY);
     }
 
+    // Réinitialise le timer d'auto-switch.
     function resetAutoSwitch() {
         scheduleAutoSwitch();
     }
 
+    // Met à jour les textes et le lien du bouton du slide.
     function updateContent(index) {
         const slide = slides[index];
 
@@ -105,10 +134,12 @@ document.addEventListener("DOMContentLoaded", () => {
         playNowBtn.setAttribute("href", slide.playHref);
     }
 
+    // Crée les points de navigation sous le hero.
     function renderDots() {
         dotsContainer.innerHTML = "";
 
         slides.forEach((_, index) => {
+            // Un bouton par slide.
             const dot = document.createElement("button");
             dot.type = "button";
             dot.className = "screenDot";
@@ -119,6 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 dot.classList.add("active");
             }
 
+            // Cliquer un point affiche le slide correspondant.
             dot.addEventListener("click", () => {
                 requestedMode = "frozen";
                 resetAutoSwitch();
@@ -139,6 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Met à jour le point actif sans recréer toute la liste.
     function updateDots() {
         const dots = dotsContainer.querySelectorAll(".screenDot");
         dots.forEach((dot, index) => {
@@ -146,6 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Lance la lecture vidéo en gérant les refus navigateur.
     async function safePlay() {
         try {
             await video.play();
@@ -156,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Applique l'état visuel de l'aperçu figé.
     function setFrozenUI() {
         media.classList.remove("trailer-active");
         content.classList.remove("is-hidden");
@@ -163,6 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.classList.add("is-frozen");
     }
 
+    // Applique l'état visuel de la bande-annonce.
     function setTrailerUI() {
         media.classList.add("trailer-active");
         content.classList.add("is-hidden");
@@ -170,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.classList.add("is-playing");
     }
 
+    // Joue un court instant la vidéo puis la met en pause pour créer un aperçu vivant.
     async function applyFrozenState() {
         requestedMode = "frozen";
         clearFreezeTimeout();
@@ -191,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         scheduleAutoSwitch();
     }
 
+    // Lance la bande-annonce complète du slide courant.
     async function applyTrailerState() {
         requestedMode = "trailer";
         clearFreezeTimeout();
@@ -213,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Applique le mode demandé après le chargement d'une vidéo.
     async function applyRequestedMode() {
         if (requestedMode === "trailer") {
             await applyTrailerState();
@@ -221,14 +260,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Charge la source vidéo du slide demandé.
     function loadVideoSource(index) {
         return new Promise((resolve) => {
+            // Jeton unique pour ignorer les réponses d'un ancien chargement.
             const loadToken = ++currentLoadToken;
             isVideoReady = false;
 
+            // Stoppe l'ancienne vidéo.
             video.pause();
             clearFreezeTimeout();
 
+            // Succès de chargement vidéo.
             const onLoaded = () => {
                 if (loadToken !== currentLoadToken) {
                     return;
@@ -239,6 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 resolve(true);
             };
 
+            // Échec de chargement vidéo.
             const onError = () => {
                 if (loadToken !== currentLoadToken) {
                     return;
@@ -249,38 +293,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 resolve(false);
             };
 
+            // Nettoie les écouteurs après réussite ou erreur.
             function cleanup() {
                 video.removeEventListener("loadeddata", onLoaded);
                 video.removeEventListener("canplay", onLoaded);
                 video.removeEventListener("error", onError);
             }
 
+            // Plusieurs événements peuvent signaler que la vidéo est prête.
             video.addEventListener("loadeddata", onLoaded);
             video.addEventListener("canplay", onLoaded);
             video.addEventListener("error", onError);
 
+            // Change la source et déclenche le chargement.
             video.src = slides[index].video;
             video.load();
         });
     }
 
+    // Affiche un slide avec transition et chargement vidéo.
     async function showSlide(index) {
         if (isTransitioning) return;
 
+        // Verrouille les changements pendant la transition.
         isTransitioning = true;
         clearFreezeTimeout();
         clearAutoSwitchTimeout();
         clearSwitchTimeout();
 
+        // Ajoute la classe CSS de fondu.
         media.classList.add("is-switching");
 
         switchTimeout = setTimeout(async () => {
+            // Met à jour l'index puis recharge la vidéo.
             currentIndex = index;
             updateDots();
 
             const loaded = await loadVideoSource(index);
             updateContent(index);
 
+            // Si la vidéo échoue, on restaure un état stable.
             if (!loaded) {
                 media.classList.remove("is-switching");
                 isTransitioning = false;
@@ -289,6 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            // Double requestAnimationFrame pour laisser le navigateur appliquer les styles.
             requestAnimationFrame(() => {
                 requestAnimationFrame(async () => {
                     media.classList.remove("is-switching");
@@ -299,12 +352,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }, SWITCH_FADE_DELAY);
     }
 
+    // Passe au slide suivant en boucle.
     function nextSlide() {
         requestedMode = "frozen";
         const nextIndex = (currentIndex + 1) % slides.length;
         showSlide(nextIndex);
     }
 
+    // Bouton de bande-annonce.
     watchTrailerBtn.addEventListener("click", async () => {
         requestedMode = "trailer";
         clearAutoSwitchTimeout();
@@ -320,6 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await applyTrailerState();
     });
 
+    // Quand la souris quitte le hero, on revient à l'aperçu figé.
     media.addEventListener("mouseleave", async () => {
         if (requestedMode === "trailer") {
             requestedMode = "frozen";
@@ -327,11 +383,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // À la fin d'une bande-annonce, retour à l'aperçu.
     video.addEventListener("ended", async () => {
         requestedMode = "frozen";
         await applyFrozenState();
     });
 
+    // Initialisation du hero.
     renderDots();
     updateContent(0);
     showSlide(0);

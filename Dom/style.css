@@ -5,30 +5,47 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap');
 
 /* ---------- Reset & Base ---------- */
+/* Réinitialise les marges et le modèle de boîte pour obtenir un rendu stable. */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Variables globales : couleurs, tailles et valeurs réutilisées dans toute l'interface. */
 :root {
+    /* Couleur principale néon utilisée pour les contours et accents. */
     --li-blue:      #14d4ff;
+    /* Variante plus sombre du bleu principal. */
     --li-blue-dark: #0a95cc;
+    /* Bleu de surface pour les zones secondaires. */
     --li-blue-light:#15263f;
+    /* Accent vert utilisé pour les réussites et éléments actifs. */
     --li-green:     #2ff3a0;
+    /* Fond général de la page. */
     --li-bg:        #070d1b;
+    /* Fond des panneaux et cartes. */
     --li-surface:   #0f1a2d;
+    /* Couleur de bordure standard. */
     --li-border:    #233a5e;
+    /* Couleur du texte principal. */
     --li-text:      #dff6ff;
+    /* Couleur du texte secondaire. */
     --li-muted:     #8ca9c4;
 
+    /* Taille de base des cellules de la grille. */
     --cell-size:    62px;
+    /* Espace entre les cellules. */
     --gap:          3px;
+    /* Rayon des cartes principales. */
     --radius-card:  14px;
+    /* Ombre commune pour les surfaces flottantes. */
     --shadow:       0 10px 40px rgba(0,0,0,0.45);
+    /* Transition courte utilisée pour les interactions. */
     --transition:   0.15s ease;
 }
 
+/* Style général du document et fond néon. */
 html, body {
     height: 100%;
     background:
@@ -40,6 +57,7 @@ html, body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Overlays plein écran pour le menu, les scores et le concepteur. */
 .mode-menu-overlay,
 .designer-overlay {
     position: fixed;
@@ -56,6 +74,7 @@ html, body {
     backdrop-filter: blur(8px);
 }
 
+/* Cartes centrales affichées dans les overlays. */
 .mode-menu-card,
 .designer-card {
     width: min(520px, 92vw);
@@ -67,6 +86,7 @@ html, body {
     text-align: center;
 }
 
+/* Petit logo texte du menu principal. */
 .mode-menu-logo {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.88rem;
@@ -75,6 +95,7 @@ html, body {
     margin-bottom: 10px;
 }
 
+/* Titres principaux des cartes de menu et de concepteur. */
 .mode-menu-title,
 .designer-card h2 {
     font-family: 'Orbitron', sans-serif;
@@ -83,6 +104,7 @@ html, body {
     margin-bottom: 10px;
 }
 
+/* Textes descriptifs sous les titres des cartes. */
 .mode-menu-subtitle,
 .designer-card p {
     color: var(--li-muted);
@@ -91,12 +113,14 @@ html, body {
     margin-bottom: 18px;
 }
 
+/* Groupes de boutons dans les overlays. */
 .mode-menu-actions,
 .designer-actions {
     display: grid;
     gap: 10px;
 }
 
+/* Grille de choix de taille dans le concepteur. */
 .designer-grid-picker {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -104,6 +128,7 @@ html, body {
     margin-bottom: 14px;
 }
 
+/* Bouton de taille de grille du concepteur. */
 .designer-grid-btn {
     min-height: 44px;
     border-radius: 10px;
@@ -395,21 +420,25 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 @media (max-width: 700px) {
+    /* Sur tablette/mobile, la palette passe sur deux lignes de cinq chiffres. */
     .designer-number-palette {
         grid-template-columns: repeat(5, minmax(0, 1fr));
     }
 
+    /* Les contrôles de scores se placent verticalement quand la largeur manque. */
     .scores-toolbar {
         flex-direction: column;
         align-items: stretch;
     }
 
+    /* Le bouton de tri prend toute la largeur disponible. */
     .scores-sort-btn {
         width: 100%;
     }
 }
 
 /* ---------- Page wrapper ---------- */
+/* Centre verticalement l'expérience de jeu dans la page. */
 .page-wrapper {
     min-height: 100vh;
     display: flex;
@@ -420,6 +449,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Header ---------- */
+/* En-tête contenant le logo, la difficulté et le timer. */
 .app-header {
     width: 100%;
     max-width: 600px;
@@ -431,12 +461,14 @@ body.designer-mode .cell.designer-drop-target {
     margin-bottom: 20px;
 }
 
+/* Bloc marque à gauche du header. */
 .brand {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
+/* Icône carrée du jeu dans le header. */
 .brand-logo {
     width: 40px;
     height: 40px;
@@ -445,12 +477,14 @@ body.designer-mode .cell.designer-drop-target {
     filter: drop-shadow(0 0 8px #14d4ff66);
 }
 
+/* Textes du logo empilés verticalement. */
 .brand-text {
     display: flex;
     flex-direction: column;
     line-height: 1.1;
 }
 
+/* Nom principal du jeu. */
 .brand-name {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.2rem;
@@ -460,6 +494,7 @@ body.designer-mode .cell.designer-drop-target {
     text-shadow: 0 0 10px #14d4ff66;
 }
 
+/* Sous-titre du jeu sous le nom. */
 .brand-sub {
     font-size: 0.78rem;
     font-weight: 700;
@@ -468,6 +503,7 @@ body.designer-mode .cell.designer-drop-target {
     text-transform: uppercase;
 }
 
+/* Zone de contrôles à droite du header. */
 .header-controls {
     display: flex;
     align-items: center;
@@ -475,6 +511,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* Difficulty selector */
+/* Conteneur du label et du select de difficulté. */
 .difficulty-selector {
     display: flex;
     flex-direction: column;
@@ -509,6 +546,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* Timer */
+/* Boîte visuelle du chronomètre. */
 .timer-display {
     display: flex;
     align-items: center;
@@ -532,6 +570,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Instructions ---------- */
+/* Phrase d'objectif affichée au-dessus de la grille. */
 .instructions {
     font-size: 0.88rem;
     color: var(--li-muted);
@@ -546,11 +585,13 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Game Area ---------- */
+/* Zone centrale qui contient la grille. */
 .game-area {
     display: flex;
     justify-content: center;
 }
 
+/* Cadre autour de la grille. */
 #grid-container {
     background: var(--li-surface);
     border-radius: var(--radius-card);
@@ -559,6 +600,7 @@ body.designer-mode .cell.designer-drop-target {
     border: 1px solid #2d4f7d;
 }
 
+/* Grille CSS dont les dimensions sont pilotées par les variables --cols et --rows. */
 #grid {
     display: grid;
     gap: var(--gap);
@@ -576,6 +618,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Cells ---------- */
+/* Cellule individuelle du puzzle. */
 .cell {
     width: var(--cell-size);
     height: var(--cell-size);
@@ -592,6 +635,7 @@ body.designer-mode .cell.designer-drop-target {
     background: #172b48;
 }
 
+/* Case bloquée complètement par un obstacle. */
 .cell.obstacle-blocked-cell {
     background:
         repeating-linear-gradient(45deg, #1f2a3f 0 8px, #10192a 8px 16px);
@@ -649,6 +693,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* Number label */
+/* Chiffre affiché au centre d'une case indice. */
 .val-span {
     position: relative;
     z-index: 3;
@@ -660,6 +705,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* Number badge highlight for puzzle hints */
+/* Apparence spéciale des cases contenant les chiffres imposés. */
 .cell.is-hint .val-span {
     background: #060a14;
     color: #eaf9ff;
@@ -676,11 +722,13 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* Active (in path) */
+/* Case qui appartient au chemin tracé par le joueur. */
 .cell.active {
     background: linear-gradient(180deg, #0f2d4d 0%, #123b65 100%);
 }
 
 /* ---------- Path dot ---------- */
+/* Point central utilisé pour dessiner le chemin. */
 .path-dot {
     width: 14px;
     height: 14px;
@@ -704,6 +752,7 @@ body.designer-mode .cell.designer-drop-target {
     box-shadow: 0 0 16px #2ff3a0;
 }
 
+/* Surbrillance de la case conseillée par le bouton indice. */
 .cell.hint-target {
     outline: 2px solid #ffcc29;
     outline-offset: -2px;
@@ -717,6 +766,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Connectors ---------- */
+/* Segments qui relient visuellement les cases voisines du chemin. */
 .connector {
     position: absolute;
     background: var(--li-blue);
@@ -735,6 +785,7 @@ body.designer-mode .cell.designer-drop-target {
 .connector-right  { height: 6px; right: 0;  top:  calc(50% - 3px); width:  calc(50% + 3px); }
 
 /* ---------- Action bar ---------- */
+/* Barre de boutons sous la grille. */
 .action-bar {
     display: flex;
     gap: 10px;
@@ -742,6 +793,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Buttons ---------- */
+/* Style commun des boutons de l'interface. */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -799,6 +851,7 @@ body.designer-mode .cell.designer-drop-target {
     background: #ffd95e;
 }
 
+/* Texte affiché sous les boutons pour donner l'indice au joueur. */
 .hint-text {
     margin-top: 12px;
     font-size: 0.98rem;
@@ -808,6 +861,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Loading Overlay ---------- */
+/* Overlay affiché pendant la génération d'un puzzle. */
 .loading-overlay {
     position: fixed;
     inset: 0;
@@ -824,6 +878,7 @@ body.designer-mode .cell.designer-drop-target {
     color: #b8d5f0;
 }
 
+/* Cercle animé au centre du chargement. */
 .loading-spinner {
     width: 36px;
     height: 36px;
@@ -838,6 +893,7 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Win Overlay ---------- */
+/* Overlay de victoire affiché quand le puzzle est terminé. */
 .win-overlay {
     position: fixed;
     inset: 0;
@@ -855,6 +911,7 @@ body.designer-mode .cell.designer-drop-target {
     to   { opacity: 1; }
 }
 
+/* Carte centrale de l'écran de victoire. */
 .win-card {
     background: var(--li-surface);
     border: 1px solid #2d4f7d;
@@ -890,6 +947,7 @@ body.designer-mode .cell.designer-drop-target {
     margin-bottom: 24px;
 }
 
+/* Ligne des statistiques de fin de partie. */
 .win-stats {
     display: flex;
     gap: 16px;
@@ -921,6 +979,7 @@ body.designer-mode .cell.designer-drop-target {
     color: var(--li-text);
 }
 
+/* Boutons d'action proposés après la victoire. */
 .win-buttons {
     display: flex;
     flex-direction: column;
@@ -933,37 +992,44 @@ body.designer-mode .cell.designer-drop-target {
 }
 
 /* ---------- Utilities ---------- */
+/* Classe utilitaire pour masquer un élément. */
 .hidden {
     display: none !important;
 }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 420px) {
+    /* Réduit les cellules pour que la grille tienne sur les très petits écrans. */
     :root {
         --cell-size: 50px;
     }
 
+    /* Réduit le padding autour de la grille. */
     #grid-container {
         padding: 14px;
     }
 
+    /* Empile le header sur mobile étroit. */
     .app-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
 
+    /* Les contrôles du header prennent toute la largeur. */
     .header-controls {
         width: 100%;
         justify-content: space-between;
     }
 
+    /* Les boutons d'action passent en colonne. */
     .action-bar {
         flex-direction: column;
         width: 100%;
         max-width: 360px;
     }
 
+    /* Centre le contenu des boutons en version mobile. */
     .btn {
         justify-content: center;
     }

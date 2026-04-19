@@ -3,7 +3,10 @@
    Theme : Cyan néon + jaune électrique
    ======================================================== */
 
+/* Ce fichier stylise uniquement la page explicative du jeu Dom / Neon Zip. */
+
 :root {
+    /* Palette dédiée à la page Dom. */
     --dom-primary: #22d3ee;
     --dom-primary-deep: #0891b2;
     --dom-accent: #facc15;
@@ -15,6 +18,7 @@
 }
 
 /* ───────── HERO ───────── */
+/* Section hero de la page Dom. */
 .domHero {
     position: relative;
     width: 100%;

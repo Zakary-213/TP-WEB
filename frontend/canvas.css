@@ -3,7 +3,10 @@
    Cohérent avec index.css (navbar, couleurs, boutons)
    ======================================================== */
 
+/* Ce fichier stylise uniquement la page explicative du jeu Canvas. */
+
 /* ───────── HERO ───────── */
+/* Section hero de la page Canvas. */
 .rulesHero {
     position: relative;
     width: 100%;
