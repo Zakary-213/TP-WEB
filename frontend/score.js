@@ -1,23 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Toute la page scores est initialisée après le chargement du DOM.
+
     // ── Auth state (mirrors app.js) ───────────────────────────
     const isAuthenticated = () => localStorage.getItem('tpweb_is_authenticated') === 'true';
+    // Id utilisateur stocké après connexion, utilisé pour filtrer les scores API.
     const getUserId       = () => localStorage.getItem('tpweb_user_id');
+    // Pseudo affiché dans l'en-tête de la page scores.
     const getUsername     = () => localStorage.getItem('tpweb_username') || 'Joueur';
 
     // ── API URL builder (mirrors app.js) ─────────────────────
     const configuredBase = ((window.__APP_CONFIG__?.API_BASE_URL) || '').replace(/\/$/, '');
+    // En local, les appels restent sur la même origine ; en production, on utilise Railway.
     const isLocal        = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
     const apiBaseUrl     = isLocal ? '' : configuredBase;
+    // Construit une URL API propre.
     const toApiUrl       = path => `${apiBaseUrl}${path.startsWith('/') ? path : '/' + path}`;
 
     // ── Elements ─────────────────────────────────────────────
     const authWall    = document.getElementById('scoreAuthWall');
+    // Contenu principal visible uniquement si l'utilisateur est connecté.
     const scoreMain   = document.getElementById('scoreMain');
+    // Texte de bienvenue personnalisé.
     const welcomeName = document.getElementById('scoreWelcomeName');
 
     // ── Page init ────────────────────────────────────────────
     const initPage = () => {
+        // Si l'utilisateur n'est pas connecté, on affiche le mur d'authentification.
         if (!isAuthenticated()) {
             if (authWall)  authWall.style.display  = 'flex';
             if (scoreMain) scoreMain.style.display = 'none';
@@ -28,22 +37,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (scoreMain) scoreMain.style.display = 'block';
         if (welcomeName) welcomeName.textContent = `Bonjour, ${getUsername()}`;
 
+        // Canvas est l'onglet chargé par défaut.
         activateTab('canvas');
         loadGame('canvas');
     };
 
     // ── Auth wall buttons ─────────────────────────────────────
     document.getElementById('scoreLoginBtn')?.addEventListener('click', () => {
+        // Réutilise la modale globale d'authentification.
         window.authModalController?.openModal('login');
     });
 
     document.getElementById('scoreSignupBtn')?.addEventListener('click', () => {
+        // Ouvre la même modale, directement sur l'inscription.
         window.authModalController?.openModal('signup');
     });
 
     // ── Tab system ────────────────────────────────────────────
     const loadedGames = new Set();
 
+    // Active un onglet et affiche uniquement la section correspondante.
     const activateTab = (game) => {
         document.querySelectorAll('.scoreTab').forEach(t => {
             const active = t.dataset.game === game;
@@ -56,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Charge les données d'un jeu une seule fois.
     const loadGame = (game) => {
         if (loadedGames.has(game)) return;
         loadedGames.add(game);
@@ -75,17 +89,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── UI helpers ────────────────────────────────────────────
     const showLoading = (el) => {
+        // Injecte un spinner commun à tous les onglets.
         el.innerHTML = `<div class="scoreLoading"><div class="scoreSpinner"></div><span>Chargement...</span></div>`;
     };
 
+    // Affiche un état vide.
     const showEmpty = (el, msg) => {
         el.innerHTML = `<p class="scoreEmpty">${msg}</p>`;
     };
 
+    // Affiche un état d'erreur.
     const showError = (el, msg) => {
         el.innerHTML = `<p class="scoreEmpty scoreEmpty--error">${msg}</p>`;
     };
 
+    // Crée le badge de rang, avec un style spécial pour le top 3.
     const rankBadge = (n) => {
         if (n === 1) return `<span class="scoreRankBadge rank-1">1</span>`;
         if (n === 2) return `<span class="scoreRankBadge rank-2">2</span>`;
@@ -95,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Shared utility ────────────────────────────────────────
     const formatTimeMs = (ms) => {
+        // Convertit des millisecondes en format MM:SS.
         const total = Math.floor((Number(ms) || 0) / 1000);
         const m = Math.floor(total / 60);
         const s = total % 60;
@@ -103,15 +122,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Canvas scores ─────────────────────────────────────────
     const renderCanvasScores = async () => {
+        // Conteneur de l'onglet Canvas.
         const container = document.getElementById('canvas-score-list');
         if (!container) return;
 
+        // Les scores sont filtrés par utilisateur.
         const userId = getUserId();
         if (!userId) { showEmpty(container, 'Aucun score enregistré.'); return; }
 
         showLoading(container);
 
         try {
+            // Requête des scores Canvas solo.
             const q = new URLSearchParams({ game: 'canvas', mode: 'solo', limit: '100', userId });
             const res = await fetch(toApiUrl(`/api/scores/top?${q}`));
             const json = await res.json();
@@ -124,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = json.data;
             container.innerHTML = '';
 
+            // Carte de résumé du meilleur score.
             const bestCard = document.createElement('div');
             bestCard.className = 'scoreBestCard scoreBestCard--canvas';
             const bestTime = formatTimeMs(data[0]?.totalTime);
@@ -144,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             container.appendChild(bestCard);
 
+            // Tableau détaillé de tous les scores.
             const table = document.createElement('div');
             table.className = 'scoreTable';
 
@@ -153,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             table.appendChild(header);
 
             data.forEach((score, i) => {
+                // Une ligne par score enregistré.
                 const pseudo      = score?.data?.pseudo || score?.user?.username || 'Inconnu';
                 const time        = formatTimeMs(score?.totalTime);
                 const meteorites  = Number(score?.totalMeteorites || 0);
@@ -177,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── GOW helpers (adapted from app.js commented block) ─────
     const formatGoalMinutes = (minutes) => {
+        // Convertit les secondes/minutes de buts en liste lisible.
         if (!Array.isArray(minutes) || !minutes.length) return '—';
         return minutes.map(m => {
             if (typeof m === 'string' && /^\d{2}:\d{2}$/.test(m)) return m;
@@ -190,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const formatTournamentStage = (stage) => {
+        // Traduit le nom technique de l'étape de tournoi.
         const v = String(stage || '').toLowerCase();
         if (v === 'huitieme') return 'Huitième';
         if (v === 'quart')    return 'Quart';
@@ -199,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const expandTeam = (label) => {
+        // Remplace les abréviations d'équipes par les noms complets.
         const raw = String(label || '').trim().toUpperCase();
         const map = {
             PA: 'PARIS', LY: 'LYON', MA: 'MARSEILLE', BO: 'BORDEAUX', LI: 'LILLE',
@@ -208,6 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const deriveResult = (result, myGoals, opGoals) => {
+        // Déduit Victoire/Défaite/Nul depuis le texte sauvegardé ou le score.
         const s = String(result || '').toLowerCase();
         if (['win', 'victoire', 'gagne'].includes(s))   return 'Victoire';
         if (['loss', 'defaite', 'perdu'].includes(s))   return 'Défaite';
@@ -219,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── GOW scores ────────────────────────────────────────────
     const renderGowScores = async () => {
+        // Conteneur de l'onglet GamesOnWeb.
         const container = document.getElementById('gow-score-list');
         if (!container) return;
 
@@ -228,6 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoading(container);
 
         try {
+            // Charge les modes GamesOnWeb en parallèle puis fusionne les résultats.
             const modes = ['tournament', 'versus', '1v1'];
             const allData = (await Promise.all(
                 modes.map(async mode => {
@@ -253,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const losses = unique.filter(m => deriveResult(m?.data?.result || m?.data?.Résultat, Number(m?.data?.totalButs || 0), Number(m?.data?.totalButsAdversaire || 0)) === 'Défaite').length;
             const draws  = unique.length - wins - losses;
 
+            // Barre de statistiques globales des matchs.
             const statsBar = document.createElement('div');
             statsBar.className = 'scoreGowStats';
             statsBar.innerHTML = `
@@ -282,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.className = 'scoreMatchGrid';
 
             unique.forEach((match, i) => {
+                // Une carte par match sauvegardé.
                 const p          = match?.data || {};
                 const myGoals    = Number(p.totalButs || 0);
                 const opGoals    = Number(p.totalButsAdversaire || 0);
@@ -333,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Dom helpers ───────────────────────────────────────────
     const normalizeDiff = (diff) => {
+        // Normalise la difficulté Dom pour le libellé et la classe CSS.
         const d = String(diff || '').toLowerCase();
         if (d === 'hard'   || d === 'difficile') return { label: 'Difficile', key: 'hard' };
         if (d === 'medium' || d === 'moyen')     return { label: 'Moyen',     key: 'medium' };
@@ -341,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const normalizeMode = (mode) => {
+        // Normalise le mode Dom pour afficher Solo ou Concepteur.
         const m = String(mode || '').toLowerCase();
         if (m === 'solo')     return { label: 'Solo',        key: 'solo',     grille: 'Classique' };
         if (m === 'designer') return { label: 'Concepteur',  key: 'concepteur', grille: 'Personnalisée' };
@@ -349,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Dom scores ────────────────────────────────────────────
     const buildDomSubTable = (data, modeKey) => {
+        // Construit une sous-section Dom pour un mode précis.
         const wrapper = document.createElement('div');
         wrapper.className = 'scoreDomSubSection';
 
@@ -367,6 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const best     = data[0];
+        // Meilleur score du mode courant.
         const bestTime = formatTimeMs(best?.totalTime);
         const bestDiff = normalizeDiff(best?.data?.difficulty);
 
@@ -398,6 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
         table.appendChild(header);
 
         data.forEach((score, i) => {
+            // Une ligne par run Dom.
             const modeData = normalizeMode(score?.mode || score?.data?.mode);
             const grille   = modeData.grille;
             const n        = Number(score?.data?.gridSize);
@@ -423,6 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const renderDomScores = async () => {
+        // Conteneur de l'onglet Dom.
         const container = document.getElementById('dom-score-list');
         if (!container) return;
 
@@ -432,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoading(container);
 
         try {
+            // Charge les scores solo et concepteur en parallèle.
             const [soloData, designerData] = await Promise.all(
                 ['solo', 'designer'].map(async mode => {
                     const q = new URLSearchParams({ game: 'dom', mode, limit: '100', userId });
@@ -441,6 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             );
 
+            // Les meilleurs chronos doivent apparaître en premier.
             const sortByTime = arr => [...arr].sort((a, b) => (Number(a?.totalTime) || 0) - (Number(b?.totalTime) || 0));
             const solo     = sortByTime(soloData);
             const designer = sortByTime(designerData);
@@ -458,5 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Lance l'initialisation de la page scores.
     initPage();
 });

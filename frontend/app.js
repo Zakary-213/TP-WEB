@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Empêche le navigateur de restaurer automatiquement l'ancienne position de scroll.
     if ('scrollRestoration' in history) {
         history.scrollRestoration = 'manual';
     }
 
+    // Après connexion/déconnexion, on force le retour en haut de page.
     if (sessionStorage.getItem('tpweb_force_scroll_top') === 'true') {
         sessionStorage.removeItem('tpweb_force_scroll_top');
 
@@ -18,17 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0);
     }
 
+    // Boutons et éléments principaux de navigation.
     const logoutBtn = document.getElementById('logout-btn');
     const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
     const navMenuToggle = document.getElementById('navMenuToggle');
     const mobileNavMenu = document.getElementById('mobileNavMenu');
     const navbar = document.querySelector('.navbar');
-    /*
-    const canvasScoreEl = document.getElementById('canvas-score');
-    const canvasScoreCard = document.querySelector('.score.canvas');
-    const gowScoreEl = document.getElementById('gow-score');
-    const gowScoreCard = document.querySelector('.score.gamesonweb');
-    */
+
+    // Ferme le menu mobile et remet les attributs d'accessibilité à jour.
     const closeMobileMenu = () => {
         if (!navbar || !navMenuToggle || !mobileNavMenu) return;
 
@@ -37,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileNavMenu.setAttribute('aria-hidden', 'true');
     };
 
+    // Déconnecte l'utilisateur et recharge la page dans un état propre.
     const handleLogout = () => {
         localStorage.removeItem('tpweb_is_authenticated');
         localStorage.removeItem('tpweb_user_id');
@@ -48,9 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
     };
 
+    // Boutons de déconnexion desktop et mobile.
     logoutBtn?.addEventListener('click', handleLogout);
     mobileLogoutBtn?.addEventListener('click', handleLogout);
 
+    // Ouvre ou ferme le menu mobile.
     navMenuToggle?.addEventListener('click', () => {
         if (!navbar || !mobileNavMenu) return;
 
@@ -59,22 +61,27 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileNavMenu.setAttribute('aria-hidden', String(!isOpen));
     });
 
+    // Ferme le menu mobile quand un lien est sélectionné.
     mobileNavMenu?.querySelectorAll('a').forEach((link) => {
         link.addEventListener('click', closeMobileMenu);
     });
 
+    // Échap ferme aussi le menu mobile.
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') closeMobileMenu();
     });
 
 
+    // Clé localStorage qui représente l'état connecté/déconnecté.
     const AUTH_STATE_KEY = 'tpweb_is_authenticated';
+    // Liens qui doivent être verrouillés tant que l'utilisateur n'est pas connecté.
     const gameLinks = document.querySelectorAll('.gamePlayButton, #playNowBtn, #awardsMoreBtn, .requiresAuthPlay');
     const openLoginModalBtn = document.getElementById('openLoginModal');
     const registerNowBtn = document.getElementById('openRegisterNowModal');
     const featuredGamesSection = document.querySelector('.featuredGamesSection');
     const playNowBtn = document.getElementById('playNowBtn');
 
+    // Active/désactive les liens de jeu selon l'état d'authentification.
     const setGamesLocked = (locked) => {
         gameLinks.forEach((link) => {
             link.classList.toggle('is-locked', locked);
@@ -88,26 +95,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Vérifie si l'utilisateur est considéré comme connecté côté frontend.
     const isAuthenticated = () => localStorage.getItem(AUTH_STATE_KEY) === 'true';
 
+    // URL API configurée au build, surtout utile en production.
     const configuredApiBaseUrl = (window.__APP_CONFIG__ && window.__APP_CONFIG__.API_BASE_URL)
         ? window.__APP_CONFIG__.API_BASE_URL.replace(/\/$/, '')
         : '';
 
+    // En local, on appelle la même origine ; en production, l'API Railway.
     const isLocalRuntime = ['localhost', '127.0.0.1', '::1'].includes(window.location.hostname);
     const apiBaseUrl = isLocalRuntime ? '' : configuredApiBaseUrl;
 
+    // Construit une URL API propre, avec ou sans slash au début.
     const toApiUrl = (path) => {
         const normalizedPath = path.startsWith('/') ? path : `/${path}`;
         return `${apiBaseUrl}${normalizedPath}`;
     };
 
+    // Éléments du formulaire d'authentification.
     const loginToggle = document.getElementById('login-toggle');
     const signupToggle = document.getElementById('signup-toggle');
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const messageDiv = document.getElementById('message');
 
+    // Ouvre la popup d'authentification directement sur l'onglet connexion.
     const openLoginPopup = () => {
         if (openLoginModalBtn) {
             openLoginModalBtn.click();
@@ -121,10 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Met à jour l'interface selon l'état connecté/déconnecté.
     const syncAuthUi = () => {
         const loggedIn = isAuthenticated();
         const username = localStorage.getItem('tpweb_username') || 'Joueur';
 
+        // Éléments desktop et mobile à synchroniser.
         const navAuthButtons = document.querySelectorAll('.navAuthButtons');
         const navUserPanel   = document.getElementById('navUserPanel');
         const navUserText    = document.getElementById('navUserText');
@@ -144,9 +159,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Initialise les liens et la navigation au chargement.
     setGamesLocked(!isAuthenticated());
     syncAuthUi();
 
+    // Bloque tous les liens de jeu si l'utilisateur n'est pas connecté.
     gameLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
             if (!isAuthenticated()) {
@@ -158,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, true);
     });
 
+    // Gestion spéciale du bouton hero "Jouer", dont le href change selon le slide.
     if (playNowBtn) {
         playNowBtn.addEventListener('click', (event) => {
             const targetHref = playNowBtn.getAttribute('href');
@@ -178,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, true);
     }
 
+    // Si l'utilisateur est connecté, le CTA d'inscription descend vers les jeux.
     if (registerNowBtn) {
         registerNowBtn.addEventListener('click', (event) => {
             if (!isAuthenticated()) {
@@ -212,223 +231,16 @@ document.addEventListener('DOMContentLoaded', () => {
         loginForm.classList.remove('active');
         clearMessage();
     });
-
-    /*
-    const formatTimeMs = (ms) => {
-        const safeMs = Number(ms) || 0;
-        const totalSeconds = Math.floor(safeMs / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    };
-
-    const renderCanvasScores = async () => {
-        if (!canvasScoreEl) return;
-
-        if (!isAuthenticated()) {
-            canvasScoreEl.textContent = '';
-            return;
-        }
-
-        const userId = localStorage.getItem('tpweb_user_id');
-        if (!userId) {
-            canvasScoreEl.textContent = 'Aucun score pour ce compte.';
-            return;
-        }
-
-        canvasScoreEl.textContent = 'Chargement...';
-
-        try {
-            const query = new URLSearchParams({
-                game: 'canvas',
-                mode: 'solo',
-                limit: '100',
-                userId
-            });
-            const response = await fetch(toApiUrl(`/api/scores/top?${query.toString()}`));
-            const result = await response.json();
-
-            if (!result.success || !Array.isArray(result.data) || result.data.length === 0) {
-                canvasScoreEl.textContent = 'Aucun score pour ce compte.';
-                return;
-            }
-
-            canvasScoreEl.replaceChildren();
-            result.data.forEach((score, index) => {
-                const pseudo = score?.data?.pseudo || score?.user?.username || 'Inconnu';
-                const totalTime = formatTimeMs(score?.totalTime);
-                const totalMeteorites = Number(score?.totalMeteorites || 0);
-
-                const row = document.createElement('div');
-                row.textContent = `${index + 1}. ${pseudo} - ${totalTime} - ${totalMeteorites} météorites`;
-                canvasScoreEl.appendChild(row);
-            });
-        } catch (error) {
-            canvasScoreEl.textContent = 'Impossible de charger les scores.';
-        }
-    };
-
-    const formatGoalMinutes = (minutes) => {
-        if (!Array.isArray(minutes) || minutes.length === 0) {
-            return '-';
-        }
-
-        return minutes
-            .map((m) => {
-                if (typeof m === 'string' && /^\d{2}:\d{2}$/.test(m)) {
-                    return m;
-                }
-
-                const numeric = Number(m);
-                if (Number.isFinite(numeric)) {
-                    const safeSeconds = Math.max(0, Math.floor(numeric));
-                    const min = Math.floor(safeSeconds / 60);
-                    const sec = safeSeconds % 60;
-                    return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
-                }
-
-                return null;
-            })
-            .filter(Boolean)
-            .join(', ');
-    };
-
-    const formatTournamentStage = (stage) => {
-        const value = typeof stage === 'string' ? stage.toLowerCase() : '';
-
-        if (value === 'huitieme') return 'Huitieme de finale';
-        if (value === 'quart') return 'Quart de finale';
-        if (value === 'demi') return 'Demi-finale';
-        if (value === 'finale') return 'Finale';
-        return '';
-    };
-
-    const expandTeamLabel = (label) => {
-        const raw = typeof label === 'string' ? label.trim() : '';
-        if (!raw) return 'Equipe';
-
-        const shortToFull = {
-            PA: 'PARIS',
-            LY: 'LYON',
-            MA: 'MARSEILLE',
-            BO: 'BORDEAUX',
-            LI: 'LILLE',
-            NA: 'NANTES',
-            TO: 'TOULOUSE',
-            RE: 'RENNES',
-            NI: 'NICE',
-            ST: 'STRASBOURG'
-        };
-
-        const upper = raw.toUpperCase();
-        if (shortToFull[upper]) {
-            return shortToFull[upper];
-        }
-
-        return upper;
-    };
-
-    const deriveResultLabel = (result, myGoals, opponentGoals) => {
-        const safeResult = typeof result === 'string' ? result.toLowerCase() : '';
-
-        if (safeResult === 'win' || safeResult === 'victoire' || safeResult === 'gagne') return 'Victoire';
-        if (safeResult === 'loss' || safeResult === 'defaite' || safeResult === 'perdu') return 'Défaite';
-        if (safeResult === 'draw' || safeResult === 'nul') return 'Match nul';
-
-        if (myGoals > opponentGoals) return 'Victoire';
-        if (myGoals < opponentGoals) return 'Défaite';
-        return 'Match nul';
-    };
-
-    const renderGamesOnWebScores = async () => {
-        if (!gowScoreEl) return;
-
-        if (!isAuthenticated()) {
-            gowScoreEl.textContent = '';
-            return;
-        }
-
-        const userId = localStorage.getItem('tpweb_user_id');
-        if (!userId) {
-            gowScoreEl.textContent = 'Aucune sauvegarde pour ce compte.';
-            return;
-        }
-
-        gowScoreEl.textContent = 'Chargement...';
-
-        try {
-            const modes = ['tournament', 'versus', '1v1'];
-            const responses = await Promise.all(
-                modes.map(async (mode) => {
-                    const query = new URLSearchParams({
-                        game: 'gamesonweb',
-                        mode,
-                        limit: '100',
-                        userId
-                    });
-
-                    const response = await fetch(toApiUrl(`/api/scores/top?${query.toString()}`));
-                    const result = await response.json();
-                    if (!result.success || !Array.isArray(result.data)) {
-                        return [];
-                    }
-
-                    return result.data;
-                })
-            );
-
-            const merged = responses.flat();
-            const uniqueById = Array.from(
-                new Map(merged.map((entry) => [entry?._id || `${entry?.createdAt}-${entry?.totalTime}`, entry])).values()
-            );
-
-            if (uniqueById.length === 0) {
-                gowScoreEl.textContent = 'Aucune sauvegarde pour ce compte.';
-                return;
-            }
-
-            uniqueById.sort((a, b) => {
-                const aTime = new Date(a?.createdAt || 0).getTime();
-                const bTime = new Date(b?.createdAt || 0).getTime();
-                return bTime - aTime;
-            });
-
-            gowScoreEl.replaceChildren();
-            uniqueById.forEach((match, index) => {
-                const payload = match?.data || {};
-                const myGoals = Number(payload.totalButs || 0);
-                const opponentGoals = Number(payload.totalButsAdversaire || 0);
-                const resultLabel = deriveResultLabel(payload.result || payload.Résultat, myGoals, opponentGoals);
-                const myGoalTimes = formatGoalMinutes(payload.minuteButs);
-                const opponentGoalTimes = formatGoalMinutes(payload.minuteButsAdversaire);
-                const modeLabel = match?.mode || payload?.mode || 'inconnu';
-                const stageLabel = formatTournamentStage(payload.tournamentStage);
-                const isVersus = modeLabel === 'versus' || modeLabel === '1v1';
-                const leftTeamLabel = expandTeamLabel(payload.teamLeftLabel || 'YOU');
-                const rightTeamLabel = expandTeamLabel(payload.teamRightLabel || 'IA');
-                const myGoalsLabel = isVersus ? `Buts ${leftTeamLabel}` : 'Mes buts';
-                const opponentGoalsLabel = isVersus ? `Buts ${rightTeamLabel}` : 'Buts adverses';
-
-                const row = document.createElement('div');
-                row.textContent = `${index + 1}. [${modeLabel}${stageLabel ? ` - ${stageLabel}` : ''}] ${resultLabel} - ${myGoals} : ${opponentGoals} | ${myGoalsLabel}: ${myGoalTimes} | ${opponentGoalsLabel}: ${opponentGoalTimes}`;
-                gowScoreEl.appendChild(row);
-            });
-        } catch (error) {
-            gowScoreEl.textContent = 'Impossible de charger les sauvegardes.';
-        }
-    };
-
-    renderCanvasScores();
-    renderGamesOnWebScores();
-    */
     // Handle Signup
     signupForm.addEventListener('submit', async (e) => {
+        // Empêche le rechargement classique du formulaire.
         e.preventDefault();
+        // Récupère les champs de création de compte.
         const username = document.getElementById('signup-username').value;
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
-        console.log('username:', username, 'email:', email, 'password:', password);
         try {
+            // Envoie la demande d'inscription au backend.
             const response = await fetch(toApiUrl('/api/auth/signup'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -437,6 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
+            // Si l'inscription réussit, on connecte directement l'utilisateur côté frontend.
             if (data.success) {
                 localStorage.setItem(AUTH_STATE_KEY, 'true');
                 localStorage.setItem('tpweb_user_id', data.data.id);
@@ -446,10 +259,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginForm.reset();
                 setGamesLocked(false);
 
+                // Affiche une animation de chargement avant fermeture de la modale.
                 const loadingOverlay = document.getElementById('authLoadingOverlay');
                 if (loadingOverlay) loadingOverlay.classList.add('is-active');
 
                 setTimeout(() => {
+                    // Ferme la modale, synchronise l'UI, puis recharge la page.
                     if (loadingOverlay) loadingOverlay.classList.remove('is-active');
                     window.authModalController?.closeModal();
                     syncAuthUi();
@@ -460,20 +275,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 150);
                 }, 3000);
             } else {
+                // Message métier renvoyé par le backend.
                 showMessage(data.message || 'Erreur lors de l\'inscription', 'error');
             }
         } catch (error) {
+            // Erreur réseau ou serveur indisponible.
             showMessage('Erreur de connexion au serveur', 'error');
         }
     });
 
     // Handle Login
     loginForm.addEventListener('submit', async (e) => {
+        // Empêche le rechargement de page.
         e.preventDefault();
+        // Récupère les identifiants.
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
 
         try {
+            // Envoie la demande de connexion au backend.
             const response = await fetch(toApiUrl('/api/auth/login'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -482,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
 
+            // Connexion réussie : on stocke les informations nécessaires localement.
             if (data.success) {
                 localStorage.setItem(AUTH_STATE_KEY, 'true');
                 localStorage.setItem('tpweb_user_id', data.data.id);
@@ -491,10 +312,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 loginForm.reset();
                 setGamesLocked(false);
 
+                // Overlay de chargement pour rendre la transition plus propre.
                 const loadingOverlay = document.getElementById('authLoadingOverlay');
                 if (loadingOverlay) loadingOverlay.classList.add('is-active');
 
                 setTimeout(() => {
+                    // Ferme la modale et recharge pour mettre toute la page à jour.
                     if (loadingOverlay) loadingOverlay.classList.remove('is-active');
                     window.authModalController?.closeModal();
                     syncAuthUi();
@@ -505,19 +328,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 150);
                 }, 3000);
             } else {
+                // Identifiants refusés ou message backend.
                 showMessage(data.message || 'Identifiants invalides', 'error');
             }
         } catch (error) {
+            // Erreur réseau ou serveur inaccessible.
             showMessage('Erreur de connexion au serveur', 'error');
         }
     });
 
+    // Affiche un message dans la modale d'authentification.
     function showMessage(text, type) {
         messageDiv.textContent = text;
         messageDiv.className = `message ${type}`;
         messageDiv.style.display = 'block';
     }
 
+    // Cache et vide le message d'authentification.
     function clearMessage() {
         messageDiv.style.display = 'none';
         messageDiv.textContent = '';
