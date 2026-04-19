@@ -1,16 +1,26 @@
 <!DOCTYPE html>
+<!-- Page HTML du jeu DOM Neon ZIP. -->
 <html lang="fr">
 <head>
+    <!-- Encodage UTF-8 pour gérer les accents. -->
     <meta charset="UTF-8">
+    <!-- Responsive mobile : la largeur de page suit la largeur de l'écran. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titre affiché dans l'onglet du navigateur. -->
     <title>Neon Zip - Puzzle Mode</title>
+    <!-- Description courte du jeu pour le navigateur et les moteurs de recherche. -->
     <meta name="description" content="Jeu ZIP en mode gaming. Reliez les chiffres en traçant un chemin qui remplit toute la grille.">
+    <!-- Optimisation du chargement des polices Google. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Préconnexion au domaine qui sert les fichiers de police. -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Polices principales utilisées par l'interface. -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- Feuille de style du jeu DOM. -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Overlay affiché au lancement : choix entre jouer, scores et concepteur. -->
     <div id="mode-menu-overlay" class="mode-menu-overlay">
         <div class="mode-menu-card">
             <div class="mode-menu-logo">NEON ZIP</div>
@@ -24,6 +34,7 @@
         </div>
     </div>
 
+    <!-- Overlay des meilleurs scores de l'utilisateur. -->
     <div id="scores-overlay" class="designer-overlay hidden" aria-hidden="true">
         <div class="designer-card scores-card">
             <h2>Meilleurs Scores</h2>
@@ -54,6 +65,7 @@
         </div>
     </div>
 
+    <!-- Overlay de sélection de taille pour le concepteur de niveau. -->
     <div id="designer-overlay" class="designer-overlay hidden" aria-hidden="true">
         <div class="designer-card">
             <h2>Concepteur niveau</h2>
@@ -71,6 +83,7 @@
         </div>
     </div>
 
+    <!-- Conteneur principal de la page de jeu. -->
     <div class="page-wrapper">
 
         <!-- Header LinkedIn style -->
@@ -81,11 +94,14 @@
                     <path d="M23 6L12 22h8l-3 12 11-16h-8l3-12z" fill="#14d4ff"/>
                 </svg>
                 <div class="brand-text">
+                    <!-- Nom du jeu affiché dans l'en-tête. -->
                     <span class="brand-name">NEON ZIP</span>
+                    <!-- Sous-titre décoratif du jeu. -->
                     <span class="brand-sub">Puzzle Arena</span>
                 </div>
             </div>
 
+            <!-- Zone de contrôles : difficulté et chronomètre. -->
             <div class="header-controls">
                 <div class="difficulty-selector">
                     <label for="difficulty">Difficulté</label>
@@ -96,9 +112,11 @@
                     </select>
                 </div>
                 <div id="timer" class="timer-display">
+                    <!-- Icône de chronomètre en SVG inline. -->
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                     </svg>
+                    <!-- Texte du timer mis à jour par JavaScript. -->
                     <span id="timer-text">00:00</span>
                 </div>
             </div>
@@ -112,24 +130,28 @@
         <!-- Grille -->
         <main class="game-area">
             <div id="grid-container">
+                <!-- La grille est remplie dynamiquement par js/ui/grid.js. -->
                 <div id="grid"></div>
             </div>
         </main>
 
         <!-- Actions -->
         <div class="action-bar">
+            <!-- Réinitialise le tracé sans changer le puzzle courant. -->
             <button id="reset" class="btn btn-secondary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/>
                 </svg>
                 Recommencer
             </button>
+            <!-- Génère un nouveau puzzle classique. -->
             <button id="new-puzzle" class="btn btn-primary">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                 </svg>
                 Nouveau Puzzle
             </button>
+            <!-- Affiche le prochain mouvement conseillé. -->
             <button id="hint-btn" class="btn btn-accent">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                     <path d="M9 18h6"/>
@@ -140,8 +162,10 @@
             </button>
         </div>
 
+        <!-- Zone de texte mise à jour quand le joueur demande un indice. -->
         <p id="hint-text" class="hint-text">Indice: clique pour voir le premier déplacement conseillé.</p>
 
+        <!-- Espace du concepteur, caché tant que le mode création n'est pas ouvert. -->
         <section id="designer-workspace" class="designer-workspace hidden" aria-hidden="true">
             <div class="designer-workspace-head">
                 <h3>Concepteur niveau</h3>
@@ -150,8 +174,10 @@
             <p class="designer-workspace-sub">Glisse les chiffres dans les cases de la grille (1 a 10 max).</p>
             <div class="designer-validate-row">
                 <button id="designer-validate-btn" class="btn btn-primary" type="button" disabled>Valider</button>
+                <!-- Message indiquant si le niveau personnalisé est valide. -->
                 <span id="designer-validate-status" class="designer-validate-status">Place au moins 2 chiffres pour valider.</span>
             </div>
+            <!-- Palette de chiffres déplaçables vers la grille. -->
             <div id="designer-number-palette" class="designer-number-palette" role="list" aria-label="Palette des chiffres">
                 <button class="designer-number-chip" type="button" draggable="true" data-value="1" role="listitem">1</button>
                 <button class="designer-number-chip" type="button" draggable="true" data-value="2" role="listitem">2</button>
@@ -170,6 +196,7 @@
 
     <!-- Loading overlay -->
     <div id="loading" class="loading-overlay hidden">
+        <!-- Animation affichée pendant que le worker génère un puzzle. -->
         <div class="loading-spinner"></div>
         <span>Génération du puzzle…</span>
     </div>
@@ -198,8 +225,11 @@
         </div>
     </div>
 
+    <!-- Configuration runtime partagée entre les jeux. -->
     <script src="../runtime-config.js"></script>
+    <!-- API commune avec JeuCanvas pour récupérer l'utilisateur et construire les URL. -->
     <script src="../JeuCanvas/js/core/canvas-api.js"></script>
+    <!-- Point d'entrée JavaScript du jeu DOM. -->
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
