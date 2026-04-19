@@ -11,7 +11,7 @@ Ce dépôt regroupe l'ensemble des projets réalisés dans le cadre du cours **T
 | Projet | Technologie principale | Présentation |
 |---|---|---|
 | 🌌 **Météorite Canvas** | Canvas HTML5 | *à venir* |
-| ⚽ **GamesOnWeb — Foot 3D** | Babylon.js (3D WebGL) | *à venir* |
+| ⚽ **GamesOnWeb — Foot 3D** | Babylon.js (3D WebGL) | [📺 Voir la vidéo](https://www.youtube.com/watch?v=tEWurigpVdk)|
 | 🔌 **Neon ZIP** | Manipulation du DOM | [📺 Voir la vidéo](https://www.youtube.com/watch?v=2mVYGNk6eOI) |
 
 🌐 **URL du site déployé** : https://tp-web-hamadouche-ozdoev.vercel.app
