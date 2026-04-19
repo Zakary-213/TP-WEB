@@ -149,7 +149,7 @@ Puzzle game 2D de tracé de chemin développé avec la **manipulation du DOM HTM
 
 **Zakary Hamadouche — 50% | Akramat Ozdoev — 50%**
 
-On a vraiment travaillé main dans la main sur les trois projets du début à la fin. Il n'y a pas eu un projet porté par l'un ou l'autre — on s'est réparti les tâches de manière complémentaire à chaque fois.
+On a vraiment travaillé main dans la main sur les trois projets du début à la fin. Il n'y a pas eu un projet porté par l'un ou l'autre, on s'est réparti les tâches de manière complémentaire à chaque fois.
 
 ---
 
