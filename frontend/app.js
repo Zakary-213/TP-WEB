@@ -19,20 +19,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const logoutBtn = document.getElementById('logout-btn');
+    const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+    const navMenuToggle = document.getElementById('navMenuToggle');
+    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    const navbar = document.querySelector('.navbar');
     /*
     const canvasScoreEl = document.getElementById('canvas-score');
     const canvasScoreCard = document.querySelector('.score.canvas');
     const gowScoreEl = document.getElementById('gow-score');
     const gowScoreCard = document.querySelector('.score.gamesonweb');
     */
-    logoutBtn.addEventListener('click', () => {
+    const closeMobileMenu = () => {
+        if (!navbar || !navMenuToggle || !mobileNavMenu) return;
+
+        navbar.classList.remove('menu-open');
+        navMenuToggle.setAttribute('aria-expanded', 'false');
+        mobileNavMenu.setAttribute('aria-hidden', 'true');
+    };
+
+    const handleLogout = () => {
         localStorage.removeItem('tpweb_is_authenticated');
         localStorage.removeItem('tpweb_user_id');
         localStorage.removeItem('tpweb_username');
         setGamesLocked(true);
         syncAuthUi();
+        closeMobileMenu();
         sessionStorage.setItem('tpweb_force_scroll_top', 'true');
         window.location.reload();
+    };
+
+    logoutBtn?.addEventListener('click', handleLogout);
+    mobileLogoutBtn?.addEventListener('click', handleLogout);
+
+    navMenuToggle?.addEventListener('click', () => {
+        if (!navbar || !mobileNavMenu) return;
+
+        const isOpen = navbar.classList.toggle('menu-open');
+        navMenuToggle.setAttribute('aria-expanded', String(isOpen));
+        mobileNavMenu.setAttribute('aria-hidden', String(!isOpen));
+    });
+
+    mobileNavMenu?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') closeMobileMenu();
     });
 
 
@@ -93,13 +125,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const loggedIn = isAuthenticated();
         const username = localStorage.getItem('tpweb_username') || 'Joueur';
 
-        const navAuthButtons = document.querySelector('.navAuthButtons');
+        const navAuthButtons = document.querySelectorAll('.navAuthButtons');
         const navUserPanel   = document.getElementById('navUserPanel');
         const navUserText    = document.getElementById('navUserText');
+        const mobileNavUserPanel = document.getElementById('mobileNavUserPanel');
+        const mobileNavUserText = document.getElementById('mobileNavUserText');
 
-        if (navAuthButtons) navAuthButtons.style.display = loggedIn ? 'none' : 'flex';
+        navAuthButtons.forEach((buttons) => {
+            buttons.style.display = loggedIn ? 'none' : 'flex';
+        });
         if (navUserPanel)   navUserPanel.style.display   = loggedIn ? 'flex' : 'none';
         if (navUserText)    navUserText.textContent = `Bonjour, ${username}`;
+        if (mobileNavUserPanel) mobileNavUserPanel.style.display = loggedIn ? 'flex' : 'none';
+        if (mobileNavUserText) mobileNavUserText.textContent = `Bonjour, ${username}`;
 
         if (registerNowBtn) {
             registerNowBtn.textContent = loggedIn ? 'VOIR LES JEUX' : "S'INSCRIRE MAINTENANT";

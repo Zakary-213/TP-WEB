@@ -372,6 +372,7 @@ body {
     min-height: 100vh;
     font-family: "Inter", sans-serif;
     color: #FFFFFF;
+    overflow-x: hidden;
     background:
         radial-gradient(circle at top left, rgba(238, 100, 42, 0.18) 0%, rgba(238, 100, 42, 0.04) 18%, transparent 38%),
         radial-gradient(circle at top right, rgba(0, 140, 255, 0.14) 0%, rgba(0, 140, 255, 0.03) 20%, transparent 40%),
@@ -383,6 +384,8 @@ body {
 
 
 .navbar {
+    position: relative;
+    z-index: 20;
     width: 100%;
     height: 104px;
     background: transparent;
@@ -419,6 +422,52 @@ body {
     display: block;
     width: 98px;
     height: auto;
+}
+
+.navMenuToggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    justify-self: end;
+    border: 1px solid rgba(238, 100, 42, 0.42);
+    background: rgba(0, 0, 0, 0.36);
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+}
+
+.navMenuToggle span {
+    width: 20px;
+    height: 2px;
+    display: block;
+    background: currentColor;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.navMenuToggle:hover {
+    transform: translateY(-1px);
+    background: rgba(238, 100, 42, 0.1);
+    border-color: rgba(238, 100, 42, 0.75);
+}
+
+.navbar.menu-open .navMenuToggle span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.navbar.menu-open .navMenuToggle span:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar.menu-open .navMenuToggle span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobileNavMenu {
+    display: none;
 }
 
 .navLink {
@@ -1452,27 +1501,422 @@ body {
     box-shadow: 0 12px 24px rgba(238, 100, 42, 0.16) !important;
 }
 
+/* Responsive */
+.heroVisual {
+    position: relative;
+}
 
+@media (max-width: 1320px) {
+    .navbar {
+        padding: 0 clamp(24px, 5vw, 56px);
+    }
 
+    .screenCard {
+        width: min(1250px, calc(100vw - 48px));
+        height: auto;
+        aspect-ratio: 1250 / 750;
+    }
 
+    .screenMedia {
+        top: 7.35%;
+        left: 2%;
+        width: 96%;
+        height: 73.35%;
+    }
 
+    .screenContent {
+        left: clamp(32px, 5.8vw, 72px);
+        max-width: min(560px, 54%);
+    }
 
+    .screenHeading {
+        font-size: clamp(48px, 5.8vw, 72px);
+    }
 
+    .screenText {
+        font-size: clamp(17px, 1.7vw, 21px);
+    }
 
+    .awardsSection,
+    .featuredGamesSection,
+    .siteFooter {
+        max-width: calc(100vw - 48px);
+    }
 
+    .awardsGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
+    .awardCard,
+    .awardsInfo,
+    .awardsButtonsRow {
+        width: 100%;
+    }
 
+    .awardsColumnLeft .awardCard:nth-child(1),
+    .awardsColumnLeft .awardCard:nth-child(2),
+    .awardsColumnRight .awardCard:nth-child(1),
+    .awardsColumnRight .awardCard:nth-child(2) {
+        height: auto;
+        aspect-ratio: 596 / 500;
+    }
+}
 
+@media (max-width: 1080px) {
+    .navbar {
+        grid-template-columns: auto 1fr auto;
+        height: 92px;
+    }
 
+    .navLinks {
+        display: none;
+    }
 
+    .navButtonWrapper {
+        display: none;
+    }
 
+    .navMenuToggle {
+        display: inline-flex;
+    }
 
+    .mobileNavMenu {
+        position: absolute;
+        top: calc(100% - 6px);
+        left: 24px;
+        right: 24px;
+        display: block;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background:
+            linear-gradient(180deg, rgba(12, 12, 12, 0.98) 0%, rgba(5, 5, 5, 0.98) 100%);
+        border: 1px solid rgba(238, 100, 42, 0.24);
+        box-shadow: 0 26px 48px rgba(0, 0, 0, 0.34);
+        transition: max-height 0.28s ease, opacity 0.22s ease;
+    }
 
+    .navbar.menu-open .mobileNavMenu {
+        max-height: 420px;
+        opacity: 1;
+        pointer-events: auto;
+    }
 
+    .mobileNavLinks,
+    .mobileNavAuth {
+        min-height: 0;
+    }
 
+    .mobileNavLinks {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 12px 18px 0;
+    }
 
+    .mobileNavLink {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 15px;
+    }
 
+    .mobileNavAuth {
+        padding: 16px 18px 18px;
+    }
 
+    .navAuthButtons--mobile,
+    .navUserPanel--mobile {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .heroSection {
+        padding-top: 28px;
+    }
+
+    .heroTitle {
+        font-size: clamp(58px, 10vw, 83px);
+    }
+
+    .gamesGrid {
+        gap: 44px;
+    }
+
+    .gameCardImageWrapper {
+        height: auto;
+        aspect-ratio: 360 / 390;
+    }
+}
+
+@media (max-width: 760px) {
+    .navbar {
+        height: auto;
+        min-height: 82px;
+        padding: 14px 18px;
+        grid-template-columns: auto auto;
+    }
+
+    .navLogo img {
+        width: 82px;
+    }
+
+    .navLinks {
+        display: none;
+    }
+
+    .mobileNavMenu {
+        left: 14px;
+        right: 14px;
+    }
+
+    .heroSection {
+        padding: 28px 18px 0;
+    }
+
+    .heroTitle {
+        font-size: clamp(54px, 18vw, 76px);
+    }
+
+    .bannerBlack,
+    .bannerWhite {
+        top: clamp(410px, 72vw, 560px);
+        height: 54px;
+    }
+
+    .bannerTicker {
+        font-size: 18px;
+        gap: 26px;
+    }
+
+    .screenSection {
+        padding-top: 34px;
+    }
+
+    .screenCard {
+        width: min(100%, calc(100vw - 24px));
+        aspect-ratio: 1 / 1.28;
+    }
+
+    .screenFrame {
+        display: none;
+    }
+
+    .screenMedia {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(238, 100, 42, 0.22);
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.34);
+    }
+
+    .videoOverlay {
+        background:
+            linear-gradient(180deg, rgba(0, 0, 0, 0.38) 0%, rgba(0, 0, 0, 0.78) 64%, rgba(0, 0, 0, 0.9) 100%);
+    }
+
+    .screenContent {
+        top: auto;
+        left: 22px;
+        right: 22px;
+        bottom: 82px;
+        max-width: none;
+        transform: none;
+    }
+
+    .screenContent.is-hidden,
+    .screenMedia.is-switching .screenContent {
+        transform: translateY(12px);
+    }
+
+    .screenKicker {
+        font-size: 12px;
+        letter-spacing: 0.14em;
+    }
+
+    .screenHeading {
+        font-size: clamp(42px, 14vw, 62px);
+    }
+
+    .screenText {
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 1.45;
+    }
+
+    .screenActions {
+        width: 100%;
+        display: flex;
+    }
+
+    .heroBtn {
+        min-width: 0;
+        flex: 1;
+        height: 50px;
+        padding-left: 18px;
+        padding-right: 18px;
+        font-size: 13px;
+    }
+
+    .registerNowButton {
+        bottom: 22px;
+        font-size: clamp(30px, 9vw, 40px);
+        width: calc(100% - 44px);
+    }
+
+    .screenDots {
+        bottom: 62px;
+    }
+
+    .featuredGamesSection {
+        margin: 64px auto 82px;
+    }
+
+    .featuredGamesHeader {
+        margin-bottom: 40px;
+    }
+
+    .featuredGamesTitle,
+    .awardsTitle {
+        font-size: clamp(48px, 15vw, 62px);
+    }
+
+    .gamesGrid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+
+    .gameCardImageWrapper {
+        max-width: 340px;
+    }
+
+    .awardsSection {
+        margin: 0 auto 82px;
+    }
+
+    .awardsTabs {
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .awardsGrid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .awardsColumnRight {
+        transform: none;
+    }
+
+    .awardsButtonsRow {
+        margin-top: 16px;
+    }
+
+    .awardsMoreBtn,
+    .awardsDetailsBtn {
+        height: 62px;
+        font-size: 20px;
+    }
+
+    .siteFooter {
+        margin-top: 56px;
+    }
+
+    .authModalOverlay {
+        padding: 16px;
+    }
+
+    .authModal {
+        max-height: calc(100vh - 32px);
+        min-height: 0;
+        overflow-y: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .authModalLeft,
+    .authModalRight {
+        padding: 34px 24px;
+    }
+
+    .authModalLeft {
+        border-right: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .authModalTitle {
+        font-size: 50px;
+    }
+
+    .authModalText {
+        font-size: 16px;
+        margin-bottom: 22px;
+    }
+
+    .authTabs {
+        display: flex;
+    }
+
+    .toggle-btn {
+        min-width: 0;
+        flex: 1;
+    }
+}
+
+@media (max-width: 430px) {
+    .navAuthButtons--mobile {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .navAuthButtons--mobile .navAuthBtn {
+        width: 100%;
+        margin-left: 0;
+        clip-path: none;
+    }
+
+    .navUserPanel--mobile {
+        align-items: stretch;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .screenCard {
+        aspect-ratio: 1 / 1.42;
+    }
+
+    .screenContent {
+        left: 18px;
+        right: 18px;
+        bottom: 84px;
+    }
+
+    .screenText {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .screenActions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .screenActions::after {
+        display: none;
+    }
+
+    .heroBtnPrimary,
+    .heroBtnGhost {
+        width: 100%;
+        margin-left: 0;
+        padding: 0 18px;
+        clip-path: none;
+    }
+}
 
 
 

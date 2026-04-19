@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeAuthModalBtn = document.getElementById('closeAuthModal');
 
     const openSignupModalBtn = document.getElementById('openSignupModal');
+    const openSignupModalMobileBtn = document.getElementById('openSignupModalMobile');
     const openRegisterNowModalBtn = document.getElementById('openRegisterNowModal');
     const playNowBtn = document.getElementById('playNowBtn');
 
@@ -74,13 +75,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const openLoginModalBtn = document.getElementById('openLoginModal');
+    const openLoginModalMobileBtn = document.getElementById('openLoginModalMobile');
 
     openSignupModalBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         openModal('signup');
     });
 
+    openSignupModalMobileBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal('signup');
+    });
+
     openLoginModalBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal('login');
+    });
+
+    openLoginModalMobileBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         openModal('login');
     });
