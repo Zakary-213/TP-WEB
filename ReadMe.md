@@ -64,7 +64,14 @@ TP-WEB/
 ├── package.json        → Dépendances Node (Express, Mongoose, bcryptjs, cors, dotenv)
 ├── vercel.json         → Configuration de déploiement Vercel (rewrites, redirections)
 └── .env                → Variables d'environnement (MONGO_URI, secrets)
+
 ```
+
+---
+
+## 🤖 Utilisation de l'IA pour les commentaires
+
+Pour améliorer la clarté et la qualité des commentaires dans le code, nous avons utilisé ponctuellement l'assistance d'une intelligence artificielle (GitHub Copilot) pour reformuler certains commentaires techniques et descriptifs.
 
 ---
 
