@@ -985,3 +985,280 @@ body {
 .scoreDomDiff--hard   { color: var(--sc-loss); }
 .scoreDomDiff--medium { color: var(--sc-gold); }
 .scoreDomDiff--easy   { color: var(--sc-win); }
+
+/* Responsive */
+@media (max-width: 1080px) {
+    .scoreHero {
+        padding: 58px 24px 76px;
+    }
+
+    .scoreMain {
+        max-width: calc(100vw - 48px);
+        padding: 0 0 96px;
+    }
+
+    .scoreAuthWallInner {
+        max-width: min(620px, 100%);
+    }
+
+    .scoreTabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .scoreTab {
+        justify-content: center;
+        min-height: 56px;
+        padding: 12px 18px;
+        text-align: center;
+    }
+
+    .scoreRowHeader,
+    .scoreRow {
+        grid-template-columns: 52px minmax(0, 1fr) 112px 120px;
+        gap: 12px;
+    }
+
+    .scoreDomRowHeader {
+        grid-template-columns: 52px 96px minmax(0, 1fr) 72px 112px 112px;
+        gap: 10px;
+    }
+
+    .scoreDomRow {
+        grid-template-columns: 52px 96px minmax(0, 1fr) 72px 112px 112px;
+        gap: 10px;
+    }
+
+    .scoreDomRowHeader--split,
+    .scoreDomRow--split {
+        grid-template-columns: 52px minmax(0, 1fr) 72px 112px 112px;
+    }
+}
+
+@media (max-width: 760px) {
+    .scoreHero {
+        padding: 38px 18px 58px;
+    }
+
+    .scoreEyebrow {
+        font-size: 11px;
+        letter-spacing: 0.2em;
+    }
+
+    .scoreHeroTitle {
+        font-size: clamp(64px, 20vw, 104px);
+    }
+
+    .scoreHeroSub {
+        font-size: 16px;
+    }
+
+    .scoreAuthWall {
+        min-height: auto;
+        padding: 28px 14px 72px;
+    }
+
+    .scoreAuthWallInner {
+        padding: 42px 22px;
+    }
+
+    .scoreAuthWallActions {
+        flex-direction: column;
+    }
+
+    .scoreAuthBtn {
+        width: 100%;
+        min-height: 56px;
+        padding: 0 22px;
+        font-size: 20px;
+    }
+
+    .scoreMain {
+        max-width: calc(100vw - 28px);
+        padding-bottom: 76px;
+    }
+
+    .scoreWelcomeBar {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-top: 34px;
+        margin-bottom: 34px;
+    }
+
+    .scoreWelcomeLeft {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .scoreWelcomeSep {
+        display: none;
+    }
+
+    .scoreTabsWrapper {
+        margin-bottom: 38px;
+    }
+
+    .scoreTabs {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .scoreTab {
+        min-height: 58px;
+        font-size: 18px;
+    }
+
+    .scoreSectionHeader {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 24px;
+    }
+
+    .scoreSectionEyebrow {
+        margin-bottom: 12px;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+    }
+
+    .scoreSectionTitle {
+        font-size: clamp(42px, 13vw, 56px);
+    }
+
+    .scoreBestCard {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+        padding: 24px 20px;
+    }
+
+    .scoreBestValues {
+        width: 100%;
+        gap: 16px;
+    }
+
+    .scoreBestNum {
+        font-size: 40px;
+    }
+
+    .scoreRowHeader,
+    .scoreDomRowHeader {
+        display: none;
+    }
+
+    .scoreRow,
+    .scoreDomRow,
+    .scoreDomRow--split {
+        grid-template-columns: 1fr auto;
+        gap: 8px 14px;
+        padding: 16px;
+    }
+
+    .scoreRank {
+        grid-row: span 2;
+    }
+
+    .scorePseudo,
+    .scoreDomCell {
+        min-width: 0;
+    }
+
+    .scoreTime,
+    .scoreMeteorites,
+    .scoreDomDiff {
+        justify-self: end;
+    }
+
+    .scoreGowStats {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+        padding: 18px 14px;
+    }
+
+    .scoreGowStat {
+        padding: 14px 10px;
+    }
+
+    .scoreGowStat:first-child {
+        padding-left: 10px;
+    }
+
+    .scoreGowStatDivider {
+        display: none;
+    }
+
+    .scoreMatchGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .scoreMatchTop {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .scoreMatchScore {
+        padding: 22px 12px;
+        gap: 10px;
+    }
+
+    .scoreMatchGoals {
+        font-size: 42px;
+    }
+
+    .scoreDomSubTitle {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 430px) {
+    .scoreAuthWallInner {
+        padding: 34px 18px;
+    }
+
+    .scoreBestValues {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .scoreBestDivider {
+        width: 100%;
+        height: 1px;
+    }
+
+    .scoreRow,
+    .scoreDomRow,
+    .scoreDomRow--split {
+        grid-template-columns: 1fr;
+    }
+
+    .scoreRank {
+        grid-row: auto;
+    }
+
+    .scoreTime,
+    .scoreMeteorites,
+    .scoreDomDiff {
+        justify-self: start;
+    }
+
+    .scoreGowStats {
+        grid-template-columns: 1fr;
+    }
+
+    .scoreMatchScore {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .scoreMatchVs {
+        align-self: center;
+    }
+
+    .scoreMatchTeamName {
+        white-space: normal;
+    }
+}

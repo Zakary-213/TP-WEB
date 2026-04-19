@@ -15,6 +15,12 @@
             <img src="./assets/images/logo.png" alt="Play logo">
         </div>
 
+        <button class="navMenuToggle" id="navMenuToggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileNavMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
         <div class="navLinks">
             <a href="/" class="navLink">Accueil</a>
             <a href="/canvas.html" class="navLink">Canvas</a>
@@ -32,6 +38,27 @@
             <div class="navUserPanel" id="navUserPanel" style="display: none;">
                 <span class="navUserText" id="navUserText">Welcome</span>
                 <button id="logout-btn" class="navLogoutButton" type="button">Se déconnecter</button>
+            </div>
+        </div>
+        <div class="mobileNavMenu" id="mobileNavMenu" aria-hidden="true">
+            <div class="mobileNavLinks">
+                <a href="/" class="navLink mobileNavLink">Accueil</a>
+                <a href="/canvas.html" class="navLink mobileNavLink">Canvas</a>
+                <a href="/gow.html" class="navLink mobileNavLink">GamesOnWeb</a>
+                <a href="/dom.html" class="navLink mobileNavLink">Dom</a>
+                <a href="/score.html" class="navLink mobileNavLink navLink--active">Scores</a>
+            </div>
+
+            <div class="mobileNavAuth">
+                <div class="navAuthButtons navAuthButtons--mobile">
+                    <a href="#" class="navAuthBtn registerButton" id="openSignupModalMobile">S'inscrire</a>
+                    <a href="#" class="navAuthBtn loginButton" id="openLoginModalMobile">Se connecter</a>
+                </div>
+
+                <div class="navUserPanel navUserPanel--mobile" id="mobileNavUserPanel" style="display: none;">
+                    <span class="navUserText" id="mobileNavUserText">Welcome</span>
+                    <button id="mobile-logout-btn" class="navLogoutButton" type="button">Se déconnecter</button>
+                </div>
             </div>
         </div>
     </nav>
