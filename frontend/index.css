@@ -1651,6 +1651,54 @@ body {
     }
 }
 
+@media (min-width: 761px) and (max-width: 1080px) {
+    .screenCard {
+        width: min(900px, calc(100vw - 64px));
+        aspect-ratio: 1250 / 790;
+    }
+
+    .screenMedia {
+        top: 7%;
+        left: 3%;
+        width: 94%;
+        height: 68%;
+    }
+
+    .screenContent {
+        left: clamp(34px, 6vw, 58px);
+        max-width: min(520px, 62%);
+    }
+
+    .screenKicker {
+        margin-bottom: 10px;
+    }
+
+    .screenHeading {
+        font-size: clamp(48px, 6.4vw, 64px);
+    }
+
+    .screenText {
+        margin-bottom: 22px;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .screenDots {
+        bottom: 88px;
+    }
+
+    .registerNowButton {
+        bottom: 28px;
+        font-size: clamp(34px, 5vw, 40px);
+    }
+
+    .featuredGamesSection {
+        margin-top: 72px;
+    }
+}
+
 @media (max-width: 760px) {
     .navbar {
         height: auto;
