@@ -1858,12 +1858,29 @@ const createScene = function (gameMode) {
 
             // Vérification avant d'exécuter la suite.
             if (isRestartWaitingKick()) {
-                // Inversion locale: la direction de visee des remises suit le ressenti joueur.
-                // Mise à jour de restartAimX.
-                input.restartAimX = -moveX;
-                // Mise à jour de restartAimZ.
-                input.restartAimZ = -moveZ;
-            // Cas utilisé quand les tests précédents échouent.
+                // Permet d'orienter la remise avec le stick droit de la manette
+                let aimX = 0, aimZ = 0;
+                if (gp.axes && gp.axes.length >= 4) {
+                    const rightStickX = gp.axes[2] || 0;
+                    const rightStickY = gp.axes[3] || 0;
+                    const stickDeadzone = 0.15;
+                    const x = Math.abs(rightStickX) > stickDeadzone ? rightStickX : 0;
+                    const y = Math.abs(rightStickY) > stickDeadzone ? rightStickY : 0;
+                    // On prend la direction du stick droit si il bouge
+                    if (x !== 0 || y !== 0) {
+                        // Normalisation pour éviter les tirs trop faibles
+                        const len = Math.sqrt(x * x + y * y);
+                        aimX = x / (len || 1);
+                        aimZ = -y / (len || 1);
+                    }
+                }
+                // Si le stick droit est neutre, fallback sur le déplacement du joueur
+                if (aimX === 0 && aimZ === 0) {
+                    aimX = -moveX;
+                    aimZ = -moveZ;
+                }
+                input.restartAimX = aimX;
+                input.restartAimZ = aimZ;
             } else {
                 // Mise à jour de restartAimX.
                 input.restartAimX = 0;
