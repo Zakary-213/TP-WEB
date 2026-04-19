@@ -97,10 +97,45 @@ const setupCameras = (scene, canvas, playerNode) => {
     fpvCamera.keysLeft = [];
     fpvCamera.keysRight = [];
 
-    // Optionnellement : gestion de la souris pour la rotation POV
+    // Optionnellement : gestion de la souris pour la rotation POV (FPS)
     // Sera contrôlée aussi via la manette dans script.js
     fpvCamera.inertia = 0.9;
     fpvCamera.angularSensibility = 1000;  // Sensibilité souris (plus bas = plus sensible)
+
+    // Ajout : contrôle souris FPS pour la caméra FPV
+    // (pointer lock + rotation caméra avec mouvement souris)
+    let isPointerLocked = false;
+    let lastPointerX = null, lastPointerY = null;
+    const mouseSensitivity = 0.0022; // Ajuste la sensibilité ici
+
+    function onPointerLockChange() {
+        isPointerLocked = document.pointerLockElement === canvas;
+        if (!isPointerLocked) {
+            lastPointerX = null;
+            lastPointerY = null;
+        }
+    }
+
+    function onMouseMove(e) {
+        if (!isPointerLocked || scene.activeCamera !== fpvCamera) return;
+        // Utilise movementX/Y pour un vrai FPS
+        const dx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+        const dy = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+        // Inverse le sens horizontal pour FPS classique (droite = droite)
+        fpvCamera.rotation.y += dx * mouseSensitivity;
+        fpvCamera.rotation.x += dy * mouseSensitivity;
+        // Clamp le pitch pour éviter de se retourner
+        fpvCamera.rotation.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, fpvCamera.rotation.x));
+    }
+
+    // Clique gauche sur le canvas pour activer le pointer lock
+    canvas.addEventListener("click", function () {
+        if (scene.activeCamera === fpvCamera && document.pointerLockElement !== canvas) {
+            canvas.requestPointerLock();
+        }
+    });
+    document.addEventListener("pointerlockchange", onPointerLockChange);
+    document.addEventListener("mousemove", onMouseMove);
 
     // Définir la caméra active par défaut (Broadcast)
     scene.activeCamera = broadcastCamera;

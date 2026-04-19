@@ -1137,25 +1137,21 @@ const createScene = function (gameMode) {
                 const rightStickX = gp.axes[2] || 0;
                 const rightStickY = gp.axes[3] || 0;
                 const stickDeadzone = 0.15;
-                
                 // Tourner la tête avec le stick droit
                 if (Math.abs(rightStickX) > stickDeadzone || Math.abs(rightStickY) > stickDeadzone) {
                     const fpv = cameras.fpvCamera;
                     const rotSpeed = 0.04;  // Sensibilité de rotation
-                    
-                    // Écrire directement à la rotation globale de la caméra (qui est parented au joueur)
-                    // Pour un UniversalCamera parenté, on ajuste la rotation de la caméra relativement
                     const x = Math.abs(rightStickX) > stickDeadzone ? rightStickX : 0;
                     const y = Math.abs(rightStickY) > stickDeadzone ? rightStickY : 0;
-                    
-                    // Rotation horizontale (yaw) - rotation autour de l'axe Y global
+                    // Rotation horizontale (yaw)
                     fpv.rotation.y += x * rotSpeed;
-                    
-                    // Rotation verticale (pitch) - limiter pour éviter de se retourner
+                    // Rotation verticale (pitch)
                     fpv.rotation.x -= y * rotSpeed;
                     fpv.rotation.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, fpv.rotation.x));
                 }
             }
+
+            // (Suppression) En FPV, la rotation de la caméra se fait uniquement à la souris, pas au clavier.
         } else if (cameraRuntime && typeof cameraRuntime.computeMoveAxes === "function") {
             const move = cameraRuntime.computeMoveAxes(input);
             moveX = move.moveX;
@@ -1506,7 +1502,7 @@ function quitGame() {
 }
 
 window.startTournamentMatch = function () {
-    currentTournamentStage = TOURNAMENT_STAGES[0];
+    currentTournamentStage = TOURNAMENT_STAGES[0]; 
     startGame("tournament");
 };
 
