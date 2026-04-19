@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const slides = [
         {
-            video: "./assets/videos/rl.mp4",
+            video: "./assets/videos/canvasBO.mp4",
             kicker: "RÉFLEXES • SURVIE • SCORE",
             heading: "ESQUIVE LES MÉTÉORES<br>ET BATS<br>TON RECORD",
             text: "Jeu d'arcade pur : pilote ton vaisseau à travers un champ d'astéroïdes. Plus tu dures, plus le score grimpe. Simple, intense, addictif.",
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
             playHref: "/JeuCanvas/index.html"
         },
         {
-            video: "./assets/videos/test.mp4",
+            video: "./assets/videos/gowBO.mp4",
             kicker: "FOOTBALL • ARCADE • TOURNOI",
             heading: "CHOISIS TON ÉQUIPE<br>ET AFFRONTE<br>L'IA",
             text: "10 équipes françaises, 4 stades, 2 modes de jeu. Lance un tournoi à élimination directe ou défie un ami en 1vs1. Plus tu avances, plus l'IA devient redoutable.",
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             playHref: "/GamesOnWeb/index.html"
         },
         {
-            video: "./assets/videos/test2.mp4",
+            video: "./assets/videos/domBO.mp4",
             kicker: "PUZZLE • LOGIQUE • NÉON",
             heading: "TRACE TON CHEMIN<br>ET BATS<br>LE CHRONO",
             text: "Relie les chiffres dans l'ordre, couvre toute la grille et crée tes propres puzzles dans Neon Zip.",
