@@ -1069,9 +1069,9 @@ body {
 
     .scoreAuthBtn {
         width: 100%;
-        min-height: 56px;
+        min-height: 62px;
         padding: 0 22px;
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .scoreMain {
@@ -1107,8 +1107,8 @@ body {
     }
 
     .scoreTab {
-        min-height: 58px;
-        font-size: 18px;
+        min-height: 62px;
+        font-size: 20px;
     }
 
     .scoreSectionHeader {

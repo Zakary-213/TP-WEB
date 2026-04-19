@@ -399,6 +399,9 @@ body {
     display: flex;
     align-items: center;
     justify-self: start;
+    line-height: 0;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .navLinks {
@@ -625,13 +628,13 @@ body {
 }
 
 .bannerBlack {
-    top: 650px;
+    top: 290px;
     transform: translateX(-50%) rotate(4deg);
     background: rgba(255, 255, 255, 0.05);
 }
 
 .bannerWhite {
-    top: 650px;
+    top: 290px;
     transform: translateX(-50%) rotate(-7deg);
     background: #FFFFFF;
 }
@@ -1616,7 +1619,7 @@ body {
     }
 
     .mobileNavLink {
-        min-height: 48px;
+        min-height: 52px;
         display: flex;
         align-items: center;
         border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -1817,10 +1820,10 @@ body {
     .heroBtn {
         min-width: 0;
         flex: 1;
-        height: 50px;
+        height: 64px;
         padding-left: 18px;
         padding-right: 18px;
-        font-size: 13px;
+        font-size: 16px;
     }
 
     .registerNowButton {
@@ -1879,8 +1882,8 @@ body {
 
     .awardsMoreBtn,
     .awardsDetailsBtn {
-        height: 62px;
-        font-size: 20px;
+        height: 68px;
+        font-size: 22px;
     }
 
     .siteFooter {
@@ -1935,7 +1938,9 @@ body {
 
     .navAuthButtons--mobile .navAuthBtn {
         width: 100%;
+        height: 54px;
         margin-left: 0;
+        font-size: 14px;
         clip-path: none;
     }
 
@@ -1974,9 +1979,32 @@ body {
     .heroBtnPrimary,
     .heroBtnGhost {
         width: 100%;
+        min-height: 64px;
         margin-left: 0;
         padding: 0 18px;
         clip-path: none;
+    }
+
+    .awardsButtonsRow {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .awardsMoreBtn,
+    .awardsDetailsBtn {
+        width: 100%;
+        height: 68px;
+        margin-left: 0;
+        clip-path: none;
+    }
+
+    .toggle-btn {
+        min-height: 56px;
+    }
+
+    .navUserPanel--mobile .navLogoutButton {
+        width: 100%;
+        min-height: 54px;
     }
 }
 
